@@ -1,54 +1,28 @@
-from DATABASE.conexao import conectar, fechar_conexao
-from DATABASE.ppc import PPC
+# Supondo que você tenha as estratégias e a classe PPC configuradas
+from DATABASE.estrategiaStatus import AprovadoStrategy, EmCriacaoStrategy, EmAvaliacaoStrategy
+from DATABASE.ppc import PPC  # Se a classe PPC estiver nesse caminho
 
-def testar_ppc():
-    try:
-        # Conectar ao banco de dados
-        conexao = conectar()
+# Criando instâncias de PPC
+ppc_criacao = PPC(id=1, titulo="PPC de Matemática", status="Em Criacao")
+ppc_avaliacao = PPC(id=2, titulo="PPC de Física", status="Em Avaliacao")
+ppc_aprovado = PPC(id=3, titulo="PPC de Química", status="Aprovado")
 
-        print("\n--- TESTANDO CRUD DA CLASSE PPC ---\n")
+# Testando PPC em criação
+print(f"Status inicial do PPC '{ppc_criacao.titulo}': {ppc_criacao.status}")
+ppc_criacao.adicionar_colaborador("João")
+ppc_criacao.enviar_para_avaliacao(["Carlos", "Ana"])
+ppc_criacao.executar_acao()
 
-        # Teste 1: Criar PPC
-        print("1. Criando PPC...")
-        PPC.criar(conexao, "PPC de Matemática", "Curso voltado para ensino básico de matemática.", 1)  # Substituir '1' pelo coordenador_id válido
-        PPC.criar(conexao, "PPC de Física", "Curso de física moderna e clássica.", 2)  # Substituir '2' pelo coordenador_id válido
-        print("PPCs criados com sucesso!\n")
+# Testando PPC em avaliação
+print(f"\nStatus inicial do PPC '{ppc_avaliacao.titulo}': {ppc_avaliacao.status}")
+ppc_avaliacao.adicionar_colaborador("Maria")  # Não deve permitir adicionar
+ppc_avaliacao.enviar_para_avaliacao(["Felipe", "Lucas"])
+ppc_avaliacao.aprovar()
+ppc_avaliacao.executar_acao()
 
-        # Teste 2: Listar todos os PPCs
-        print("2. Listando todos os PPCs...")
-        ppcs = PPC.listar_todos(conexao)
-        for ppc in ppcs:
-            print(ppc)
-        print("\n")
-
-        # Teste 3: Buscar PPC por ID
-        print("3. Buscando PPC com ID = 1...")
-        ppc = PPC.buscar_por_id(conexao, 1)
-        print(ppc)
-        print("\n")
-
-        # Teste 4: Atualizar PPC
-        print("4. Atualizando PPC com ID = 1...")
-        PPC.atualizar(conexao, 1, titulo="PPC de Matemática Avançada", descricao="Curso revisado com foco em matemática aplicada.")
-        ppc_atualizado = PPC.buscar_por_id(conexao, 1)
-        print("PPC atualizado:", ppc_atualizado)
-        print("\n")
-
-        # Teste 5: Deletar PPC
-        print("5. Deletando PPC com ID = 2...")
-        PPC.deletar(conexao, 2)
-        ppcs_restantes = PPC.listar_todos(conexao)
-        print("PPCs restantes:", ppcs_restantes)
-        print("\n")
-
-        print("--- FIM DOS TESTES ---\n")
-
-    except Exception as e:
-        print(f"Ocorreu um erro durante os testes: {e}")
-
-    finally:
-        if conexao:
-            fechar_conexao(conexao)
-
-if __name__ == "__main__":
-    testar_ppc()
+# Testando PPC aprovado
+print(f"\nStatus inicial do PPC '{ppc_aprovado.titulo}': {ppc_aprovado.status}")
+ppc_aprovado.adicionar_colaborador("Paulo")  # Não deve permitir adicionar
+ppc_aprovado.enviar_para_avaliacao(["Simone", "Gustavo"])  # Não deve permitir enviar
+ppc_aprovado.aprovar()  # Não deve permitir aprovar novamente
+ppc_aprovado.executar_acao()
