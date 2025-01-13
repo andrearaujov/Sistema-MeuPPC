@@ -7,13 +7,23 @@ class EstrategiaStatus(ABC):
         pass
 
 # Estratégia para o status "Aprovado"
-class AprovadoStrategy(EstrategiaStatus):
+class AprovadoStrategy:
     def executar_acao(self, ppc):
-        # Não permite alterações após a aprovação.
+        """
+        Executa a ação de acordo com o status 'Aprovado'.
+        Não deve permitir modificações após aprovação.
+        """
         print(f"PPC '{ppc.titulo}' está aprovado. Não é permitido fazer alterações.")
-        # Aqui, você pode adicionar uma verificação para impedir alterações no PPC após aprovação.
-        if ppc.status == 'Aprovado':
-            raise Exception("Não é possível modificar um PPC aprovado.")
+    
+    def set_status(self, ppc, status):
+        """
+        Permite mudanças de status somente se o status for válido.
+        """
+        if status != "Aprovado":
+            ppc.set_status(status)
+        else:
+            print("Não é permitido alterar o status de um PPC aprovado.")
+
 
 # Estratégia para o status "Em Criação"
 class EmCriacaoStrategy(EstrategiaStatus):
@@ -24,12 +34,23 @@ class EmCriacaoStrategy(EstrategiaStatus):
         # ppc.add_colaboradores()
 
 # Estratégia para o status "Em Avaliação"
-class EmAvaliacaoStrategy(EstrategiaStatus):
+class EmAvaliacaoStrategy:
     def executar_acao(self, ppc):
-        # Acesse os atributos usando ponto
+        """
+        Executa a ação de acordo com o status 'Em Avaliação'.
+        Permite avaliação do PPC.
+        """
         print(f"PPC '{ppc.titulo}' está em avaliação. Você pode adicionar avaliadores.")
-        # Aqui, podemos permitir que avaliadores adicionem suas avaliações, por exemplo.
-        # ppc.add_avaliadores()
+    
+    def set_status(self, ppc, status):
+        """
+        Permite mudanças de status entre avaliação e outros estados.
+        """
+        if status in ["Em Criacao", "Aprovado"]:
+            ppc.set_status(status)
+        else:
+            print(f"Status '{status}' não permitido para o PPC em avaliação.")
+
 
 
 
