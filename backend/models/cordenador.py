@@ -1,6 +1,6 @@
-from DATABASE.pessoa import Pessoa
-from DATABASE.ppcCRUD import PPCCrud
-from DATABASE.ppc import PPC
+from models.pessoa import Pessoa
+from models.ppcCRUD import PPCCrud
+from models.ppc import PPC
 
 class Coordenador(Pessoa):
     def criarPPC(self, conexao, titulo, descricao):

@@ -1,5 +1,5 @@
-from DATABASE.pessoa import Pessoa
-from DATABASE.ppcCRUD import PPCCrud
+from models.pessoa import Pessoa
+from models.ppcCRUD import PPCCrud
 class Avaliador(Pessoa):
     def avaliarPPC(self, conexao, ppc_id, aprovado, motivo_rejeicao=None):
         """

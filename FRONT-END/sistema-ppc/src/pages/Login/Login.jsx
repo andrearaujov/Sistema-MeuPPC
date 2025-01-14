@@ -1,28 +1,48 @@
-import { useState } from "react";
+// frontend/src/pages/Login/Login.jsx
+
+import React, { useState } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
-import { Link } from "react-router-dom"; // Importando o Link
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./Login.css";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (event) => {
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Dados de Login:", { username, password });
+    try {
+      const response = await axios.post("/api/users/login", { email, password });
+      console.log("Login bem-sucedido:", response.data);
+
+      // Armazena o token no localStorage
+      localStorage.setItem("token", response.data.token);
+
+      // Redireciona para a página principal ou dashboard
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+      setErrorMessage(error.response?.data?.error || "Erro ao fazer login.");
+    }
   };
 
   return (
     <div className="login-container">
       <form onSubmit={handleSubmit}>
         <h1>Acesse o sistema</h1>
+        {errorMessage && <p className="error">{errorMessage}</p>}
         <div className="input-field">
           <input
-            type="text"
+            type="email"
             placeholder="E-mail"
             required
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <FaUser className="icon" />
         </div>
@@ -47,7 +67,7 @@ const Login = () => {
         <button type="submit">Login</button>
         <div className="signup-link">
           <p>
-            Não tem uma conta? <Link to="/register">Registrar</Link> {/* Link para a página de registro */}
+            Não tem uma conta? <Link to="/register">Registrar</Link>
           </p>
         </div>
       </form>

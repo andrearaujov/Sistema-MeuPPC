@@ -1,6 +1,6 @@
-from DATABASE.conexao import conectar, fechar_conexao
-from DATABASE.ppcCRUD import PPCCrud
-from DATABASE.pessoa import Pessoa
+from models.conexao import conectar, fechar_conexao
+from models.ppcCRUD import PPCCrud
+from models.pessoa import Pessoa
 
 class Relatorio:
     def __init__(self, ppc_id):

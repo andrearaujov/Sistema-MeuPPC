@@ -1,17 +1,20 @@
-import "./App.css";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from "./pages/Login/Login";
-import Register from "./pages/Register/Register"; // Importando o componente Register
+// frontend/src/App.jsx
+
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './pages/Login/Login';
+import Register from './pages/Register/Register';
+import Dashboard from './pages/Dashboard/Dashboard'; // Novo componente
 
 function App() {
   return (
-    <Router> {/* Envolva o app com o Router */}
-      <div className="App">
-        <Routes> {/* Defina as rotas aqui */}
-          <Route path="/" element={<Login />} /> {/* Rota para Login */}
-          <Route path="/register" element={<Register />} /> {/* Rota para Register */}
-        </Routes>
-      </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} /> {/* Rota para o Dashboard */}
+        {/* Outras rotas */}
+      </Routes>
     </Router>
   );
 }

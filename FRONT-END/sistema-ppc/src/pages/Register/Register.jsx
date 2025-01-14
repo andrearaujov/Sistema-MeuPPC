@@ -1,40 +1,56 @@
+// frontend/src/pages/Register/Register.jsx
+
 import React, { useState } from 'react';
 import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './Register.css'; 
 
 const Register = () => {
-  const [name, setName] = useState('');
+  const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-  // Função que é chamada quando o formulário é enviado
-  const handleSubmit = (event) => {
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Aqui você pode adicionar a lógica para registrar o usuário, enviando os dados para a API
-    console.log('Dados do novo usuário:', { name, email, password });
+    if (password !== confirmPassword) {
+      setErrorMessage('As senhas não coincidem.');
+      return;
+    }
 
-    // Exemplo de lógica para enviar os dados do formulário a uma API (isso é apenas ilustrativo)
-    // axios.post('URL_API', { name, email, password })
-    //   .then(response => {
-    //     console.log('Usuário registrado com sucesso:', response.data);
-    //   })
-    //   .catch(error => {
-    //     console.error('Erro ao registrar usuário:', error);
-    //   });
+    try {
+      const response = await axios.post('/api/users/register', { nome, email, password });
+      console.log('Usuário registrado com sucesso:', response.data);
+      setSuccessMessage('Registro realizado com sucesso!');
+
+      // Redireciona para a página de login
+      navigate('/');
+    } catch (error) {
+      console.error('Erro ao registrar usuário:', error);
+      setErrorMessage(error.response?.data?.error || 'Erro ao registrar usuário.');
+    }
   };
 
   return (
     <div className="container">
       <form onSubmit={handleSubmit}>
         <h1>Registre-se</h1>
+        {errorMessage && <p className="error">{errorMessage}</p>}
+        {successMessage && <p className="success">{successMessage}</p>}
         <div className="input-field">
           <input
             type="text"
             placeholder="Nome"
             required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
           />
           <FaUser className="icon" />
         </div>
@@ -55,6 +71,16 @@ const Register = () => {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+          />
+          <FaLock className="icon" />
+        </div>
+        <div className="input-field">
+          <input
+            type="password"
+            placeholder="Confirme a Senha"
+            required
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
           <FaLock className="icon" />
         </div>
