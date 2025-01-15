@@ -1,0 +1,36 @@
+.ppc-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .ppc-item {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  
+  .ppc-item h2 {
+    margin: 0;
+    font-size: 24px;
+  }
+  
+  .create-link {
+    margin-top: 20px;
+    display: inline-block;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+  }
+  
+  .create-link:hover {
+    background-color: #0056b3;
+  }
+  
+  .error {
+    color: red;
+    margin-top: 10px;
+  }
+  

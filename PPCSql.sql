@@ -5,21 +5,23 @@ CREATE TABLE pessoa (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL, -- Adicionada a coluna 'senha'
     papel ENUM('Coordenador', 'Colaborador', 'Avaliador') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+
 CREATE TABLE ppc (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(200) NOT NULL,
     descricao TEXT,
-    status ENUM('Em Criacao', 'Em Avaliacao', 'Aprovado') DEFAULT 'Em Criacao',
+    status ENUM('Em Criacao', 'Em Avaliacao', 'Aprovado', 'Rejeitado') DEFAULT 'Em Criacao',
     motivo_rejeicao TEXT, -- Justificativa caso o PPC seja rejeitado
-    coordenador_id INT NOT NULL,
+    coordenador_id INT NULL, -- Permitir NULL para `ON DELETE SET NULL`
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (coordenador_id) REFERENCES pessoa(id)
+    FOREIGN KEY (coordenador_id) REFERENCES pessoa(id) ON DELETE SET NULL -- Modificação aqui
 );
 
 CREATE TABLE ppc_colaboradores (
@@ -60,7 +62,7 @@ CREATE TABLE relatorio (
 
 CREATE TABLE estrategia_status (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nome ENUM('Em Criacao', 'Em Avaliacao', 'Aprovado') NOT NULL,
+    nome ENUM('Em Criacao', 'Em Avaliacao', 'Aprovado','Rejeitado') NOT NULL,
     descricao TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -106,4 +108,3 @@ BEGIN
 END$$
 
 DELIMITER ;
-

@@ -1,5 +1,3 @@
-// frontend/src/pages/Register/Register.jsx
-
 import React, { useState } from 'react';
 import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +9,7 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [papel, setPapel] = useState('');
 
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -26,7 +25,7 @@ const Register = () => {
     }
 
     try {
-      const response = await axios.post('/api/users/register', { nome, email, password });
+      const response = await axios.post('/api/users/register', { nome, email, password, papel });
       console.log('Usuário registrado com sucesso:', response.data);
       setSuccessMessage('Registro realizado com sucesso!');
 
@@ -83,6 +82,14 @@ const Register = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
           <FaLock className="icon" />
+        </div>
+        <div className="input-field">
+          <select value={papel} onChange={(e) => setPapel(e.target.value)}>
+            <option value="">Selecione um papel</option>
+            <option value="Coordenador">Coordenador</option>
+            <option value="Avaliador">Avaliador</option>
+            <option value="Colaborador">Colaborador</option>
+          </select>
         </div>
 
         <button type="submit">Registrar</button>
