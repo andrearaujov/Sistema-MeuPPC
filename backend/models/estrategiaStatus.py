@@ -28,7 +28,9 @@ class EmCriacaoStrategy(EstrategiaStatus):
 
     def set_status(self, ppc, novo_status):
         if novo_status in ["Em Avaliacao", "Rejeitado"]:
-            ppc.set_status(novo_status)
+            # Atualizar o status diretamente, sem chamar set_status do PPC
+            ppc.status = novo_status
+            ppc._set_estrategia()
             print(f"Status do PPC '{ppc.titulo}' alterado para '{novo_status}'.")
         else:
             print(f"Transição de status para '{novo_status}' não é permitida a partir de 'Em Criacao'.")
@@ -40,7 +42,9 @@ class EmAvaliacaoStrategy(EstrategiaStatus):
 
     def set_status(self, ppc, novo_status):
         if novo_status in ["Aprovado", "Rejeitado"]:
-            ppc.set_status(novo_status)
+            # Atualizar o status diretamente, sem chamar set_status do PPC
+            ppc.status = novo_status
+            ppc._set_estrategia()
             print(f"Status do PPC '{ppc.titulo}' alterado para '{novo_status}'.")
         else:
             print(f"Transição de status para '{novo_status}' não é permitida a partir de 'Em Avaliacao'.")

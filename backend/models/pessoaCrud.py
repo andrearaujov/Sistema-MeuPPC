@@ -3,6 +3,10 @@
 from utils.database import mysql
 from MySQLdb import Error, cursors
 from models.pessoa import Pessoa
+from models.cordenador import Coordenador
+from models.colaborador import Colaborador
+from models.avaliador import Avaliador
+
 
 class PessoaCRUD:
     @staticmethod
@@ -147,6 +151,37 @@ class PessoaCRUD:
             if cursor:
                 cursor.close()
             return False
+
+
+    @staticmethod
+    def buscar_por_email(email):
+        """
+        Busca uma pessoa no banco de dados pelo email.
+        """
+        try:
+            cursor = mysql.connection.cursor(cursors.DictCursor)
+            query = "SELECT * FROM pessoa WHERE email = %s"
+            cursor.execute(query, (email,))
+            resultado = cursor.fetchone()
+            cursor.close()
+            if resultado:
+                papel = resultado['papel']
+                if papel == 'Coordenador':
+                    return Coordenador(**resultado)
+                elif papel == 'Colaborador':
+                    return Colaborador(**resultado)
+                elif papel == 'Avaliador':
+                    return Avaliador(**resultado)
+                else:
+                    return Pessoa(**resultado)
+            else:
+                return None
+        except Error as e:
+            print(f"Erro ao buscar pessoa por email: {e}")
+            if cursor:
+                cursor.close()
+            return None
+
 
     @staticmethod
     def deletar_todas():

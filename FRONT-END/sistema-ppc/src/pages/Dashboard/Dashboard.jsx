@@ -11,15 +11,19 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchPPCs = async () => {
       try {
-        const response = await axios.get('/api/ppcs');
+        const token = localStorage.getItem('token');  // Supondo que o token JWT esteja armazenado no localStorage
+        const response = await axios.get('/api/ppcs', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
         setPPCs(response.data);
       } catch (error) {
         setError('Erro ao carregar PPCs');
       }
     };
-
+  
     fetchPPCs();
   }, []);
+  
 
   return (
     <div className="dashboard-container">

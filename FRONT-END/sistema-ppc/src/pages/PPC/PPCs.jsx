@@ -4,38 +4,42 @@ import { Link } from 'react-router-dom';
 import './PPCs.css';
 
 const PPCs = () => {
-  const [ppcs, setPPCs] = useState([]);
-  const [error, setError] = useState('');
+    const [ppcs, setPPCs] = useState([]);
+    const [error, setError] = useState('');
 
-  useEffect(() => {
-    const fetchPPCs = async () => {
-      try {
-        const response = await axios.get('/api/ppcs');
-        setPPCs(response.data);
-      } catch (error) {
-        setError('Erro ao carregar PPCs');
-      }
-    };
+    useEffect(() => {
+        const fetchPPCs = async () => {
+            try {
+                const token = localStorage.getItem('token');  // Supondo que o token está armazenado no localStorage
+                const response = await axios.get('/api/ppcs', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                setPPCs(response.data);
+            } catch (error) {
+                setError('Erro ao carregar PPCs');
+            }
+        };
+        fetchPPCs();
+    }, []);
 
-    fetchPPCs();
-  }, []);
-
-  return (
-    <div>
-      <h1>Gerenciamento de PPCs</h1>
-      {error && <p className="error">{error}</p>}
-      <div className="ppc-list">
-        {ppcs.map((ppc) => (
-          <div key={ppc.id} className="ppc-item">
-            <h2>{ppc.titulo}</h2>
-            <p>{ppc.descricao}</p>
-            <Link to={`/ppcs/${ppc.id}`}>Editar</Link>
-          </div>
-        ))}
-      </div>
-      <Link to="/ppcs/create" className="create-link">Criar Novo PPC</Link>
-    </div>
-  );
+    return (
+        <div>
+            <h1>Gerenciamento de PPCs</h1>
+            {error && <p className="error">{error}</p>}
+            <div className="ppc-list">
+                {ppcs.map((ppc) => (
+                    <div key={ppc.id} className="ppc-item">
+                        <h2>{ppc.titulo}</h2>
+                        <p>{ppc.descricao}</p>
+                        <Link to={`/ppcs/${ppc.id}`}>Editar</Link>
+                    </div>
+                ))}
+            </div>
+            <Link to="/ppcs/create" className="create-link">Criar Novo PPC</Link>
+        </div>
+    );
 };
 
 export default PPCs;

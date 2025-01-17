@@ -1,5 +1,3 @@
-# models/ppc_crud.py
-
 from utils.database import mysql
 from MySQLdb import Error, cursors
 from models.ppc import PPC
@@ -74,12 +72,12 @@ class PPCCrud:
             return None
 
     @staticmethod
-    def atualizar(ppc_id, **kwargs):
+    def atualizar(conexao, ppc_id, **kwargs):
         """
         Atualiza os dados de um PPC no banco de dados.
         """
         try:
-            cursor = mysql.connection.cursor()
+            cursor = conexao.cursor()
             campos = []
             valores = []
 
@@ -97,7 +95,7 @@ class PPCCrud:
             query = f"UPDATE ppc SET {', '.join(campos)} WHERE id = %s"
             valores.append(ppc_id)
             cursor.execute(query, valores)
-            mysql.connection.commit()
+            conexao.commit()
             cursor.close()
             print(f"PPC ID {ppc_id} atualizado com sucesso!")
             return True
@@ -125,3 +123,21 @@ class PPCCrud:
             if cursor:
                 cursor.close()
             return False
+
+    @staticmethod
+    def listar_por_usuario(user_id):
+        """
+        Lista todos os PPCs relacionados ao usuário logado.
+        """
+        try:
+            cursor = mysql.connection.cursor(cursors.DictCursor)
+            query = "SELECT * FROM ppc WHERE coordenador_id = %s"
+            cursor.execute(query, (user_id,))
+            resultados = cursor.fetchall()
+            cursor.close()
+            return [PPC(**resultado) for resultado in resultados]
+        except Error as e:
+            print(f"Erro ao listar PPCs por usuário: {e}")
+            if cursor:
+                cursor.close()
+            return []
