@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, Link, useNavigate } from 'react-router-dom';  // Alteração: Importando useNavigate
-import {jwtDecode} from 'jwt-decode';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 import './EditPPC.css';
 
 const EditPPC = () => {
   const { id } = useParams();
-  const navigate = useNavigate();  // Alteração: Criando uma instância de useNavigate
+  const navigate = useNavigate();
   const [ppc, setPPC] = useState(null);
   const [error, setError] = useState('');
   const [role, setRole] = useState('');
-  const [newCollaboratorEmail, setNewCollaboratorEmail] = useState(''); // Novo estado para email do colaborador
-  const [avaliadoresIds, setAvaliadoresIds] = useState(''); // Novo estado para IDs dos avaliadores
+  const [newCollaboratorEmail, setNewCollaboratorEmail] = useState('');
+  const [avaliadoresIds, setAvaliadoresIds] = useState('');
 
   useEffect(() => {
     const fetchPPC = async () => {
@@ -36,13 +36,13 @@ const EditPPC = () => {
   const handleSave = async () => {
     try {
       const token = localStorage.getItem('token');
-      console.log('Dados a serem salvos:', ppc);  // Log dos dados a serem salvos
+      console.log('Dados a serem salvos:', ppc);
       const response = await axios.put(`/api/ppcs/${id}`, ppc, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      console.log('Resposta do servidor:', response.data);  // Log da resposta do servidor
+      console.log('Resposta do servidor:', response.data);
       alert('PPC salvo com sucesso!');
-      navigate('/dashboard');  // Alteração: Redirecionando para o dashboard após salvar
+      navigate('/dashboard');
     } catch (error) {
       console.error('Erro ao salvar PPC:', error);
       setError('Erro ao salvar PPC');
@@ -70,6 +70,9 @@ const EditPPC = () => {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       alert('PPC enviado para avaliação com sucesso!');
+      if (response.data.redirect_url) {
+        navigate(response.data.redirect_url);  // Redirecionar para o dashboard após enviar para avaliação
+      }
     } catch (error) {
       console.error('Erro ao enviar para avaliação:', error);
       setError('Erro ao enviar para avaliação');

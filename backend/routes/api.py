@@ -1,8 +1,9 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, redirect, url_for, make_response
 from utils.database import mysql
+from flask_cors import cross_origin
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
-from MySQLdb import Error
+from MySQLdb import Error, cursors
 import datetime
 from flask_mysqldb import MySQL, cursors
 from config import Config
@@ -319,6 +320,9 @@ def add_colaborador(ppc_id):
         logging.error(f'Erro interno do servidor: {e}')
         return jsonify({'error': f'Erro interno do servidor: {e}'}), 500
 
+
+
+
 @api_bp.route('/ppcs/<int:ppc_id>/enviar_para_avaliacao', methods=['POST'])
 def enviar_para_avaliacao(ppc_id):
     data = request.get_json()
@@ -338,7 +342,7 @@ def enviar_para_avaliacao(ppc_id):
         decoded_token = jwt.decode(token, Config.SECRET_KEY, algorithms=['HS256'])
         coordenador_id = decoded_token['id']
 
-        cursor = mysql.connection.cursor(DictCursor)
+        cursor = mysql.connection.cursor(cursors.DictCursor)
 
         # Verifique se o usuário logado é o coordenador do PPC
         query = "SELECT coordenador_id FROM ppc WHERE id = %s"
@@ -366,7 +370,7 @@ def enviar_para_avaliacao(ppc_id):
         cursor.close()
 
         logging.info('PPC enviado para avaliação com sucesso')
-        return jsonify({'message': 'PPC enviado para avaliação com sucesso'}), 200
+        return jsonify({'message': 'PPC enviado para avaliação com sucesso', 'redirect_url': '/dashboard'}), 200
 
     except jwt.ExpiredSignatureError:
         logging.error('Token expirado')
@@ -656,4 +660,54 @@ def listar_ppcs_avaliados_coordenadores():
     except jwt.InvalidTokenError:
         return jsonify({'error': 'Token inválido, por favor faça login novamente'}), 401
     except Exception as e:
+        return jsonify({'error': f'Erro interno do servidor: {e}'}), 500
+
+
+
+
+
+
+@api_bp.route('/perfil', methods=['GET'])
+@cross_origin(origins='http://localhost:5173', supports_credentials=True)
+def perfil():
+    logging.info('Rota /perfil acessada')
+    
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        logging.error('Cabeçalho de autorização não encontrado')
+        return jsonify({'error': 'Cabeçalho de autorização não encontrado'}), 401
+
+    try:
+        token = auth_header.split()[1]
+        logging.info('Token recebido: %s', token)
+        
+        decoded_token = jwt.decode(token, Config.SECRET_KEY, algorithms=['HS256'])
+        user_id = decoded_token['id']
+        logging.info('ID do usuário decodificado: %s', user_id)
+
+        cursor = mysql.connection.cursor(cursors.DictCursor)
+        query = "SELECT id, nome, email FROM pessoa WHERE id = %s"
+        cursor.execute(query, (user_id,))
+        user = cursor.fetchone()
+        cursor.close()
+
+        if not user:
+            logging.error('Usuário não encontrado')
+            return jsonify({'error': 'Usuário não encontrado'}), 404
+
+        logging.info('Usuário encontrado: %s', user)
+
+        return jsonify(user), 200
+
+    except jwt.ExpiredSignatureError:
+        logging.error('Token expirado')
+        return jsonify({'error': 'Token expirado, por favor faça login novamente'}), 401
+    except jwt.InvalidTokenError:
+        logging.error('Token inválido')
+        return jsonify({'error': 'Token inválido, por favor faça login novamente'}), 401
+    except Error as e:
+        logging.error('Erro ao obter perfil: %s', e)
+        return jsonify({'error': f'Erro ao obter perfil: {e}'}), 500
+    except Exception as e:
+        logging.error('Erro interno do servidor: %s', e)
         return jsonify({'error': f'Erro interno do servidor: {e}'}), 500

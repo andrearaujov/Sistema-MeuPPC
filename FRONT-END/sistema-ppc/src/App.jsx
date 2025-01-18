@@ -10,6 +10,7 @@ import AvaliarPPC from './pages/PPC/AvaliarPPC';
 import PPCsNaoAvaliados from './pages/PPC/PPCsNaoAvaliados';
 import PPCsAvaliados from './pages/PPC/PPCsAvaliados';
 import PPCsJaAvaliados from './pages/PPC/PPCsJaAvaliados';
+import Profile from './pages/Profile/Profile'; // Importando o componente de perfil
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/ppcs/nao_avaliados" element={<PPCsNaoAvaliados />} />
         <Route path="/ppcs/avaliados" element={<PPCsAvaliados />} />
         <Route path="/ppcs_ja_avaliados" element={<PPCsJaAvaliados />} />
+        <Route path="/profile" element={<Profile />} /> {/* Adicionando a rota de perfil */}
       </Routes>
     </Router>
   );
