@@ -29,3 +29,7 @@
     margin-top: 10px;
   }
   
+  .input-field input[type="file"] {
+    margin-top: 10px;
+  }
+  

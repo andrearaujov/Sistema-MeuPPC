@@ -1,0 +1,39 @@
+.ppc-list {
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .ppc-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+  
+  .ppc-item h3 {
+    margin: 0 0 10px 0;
+  }
+  
+  .ppc-item p {
+    margin: 5px 0;
+  }
+  
+  .error {
+    color: #dc3545;
+    margin-top: 10px;
+  }
+  
+  nav {
+    margin-bottom: 20px;
+  }
+  
+  nav a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  nav a:hover {
+    text-decoration: underline;
+  }
+  

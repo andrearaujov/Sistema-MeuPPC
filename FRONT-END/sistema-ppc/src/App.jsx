@@ -6,6 +6,10 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import PPCs from './pages/PPC/PPCs';
 import CreatePPC from './pages/PPC/CreatePPC';
 import EditPPC from './pages/PPC/EditPPC';
+import AvaliarPPC from './pages/PPC/AvaliarPPC';
+import PPCsNaoAvaliados from './pages/PPC/PPCsNaoAvaliados';
+import PPCsAvaliados from './pages/PPC/PPCsAvaliados';
+import PPCsJaAvaliados from './pages/PPC/PPCsJaAvaliados';
 
 function App() {
   return (
@@ -17,7 +21,10 @@ function App() {
         <Route path="/ppcs" element={<PPCs />} />
         <Route path="/ppcs/create" element={<CreatePPC />} />
         <Route path="/ppcs/:id" element={<EditPPC />} />
-        {/* Outras rotas */}
+        <Route path="/avaliar/:id" element={<AvaliarPPC />} />
+        <Route path="/ppcs/nao_avaliados" element={<PPCsNaoAvaliados />} />
+        <Route path="/ppcs/avaliados" element={<PPCsAvaliados />} />
+        <Route path="/ppcs_ja_avaliados" element={<PPCsJaAvaliados />} />
       </Routes>
     </Router>
   );

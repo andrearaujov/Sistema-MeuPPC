@@ -22,12 +22,15 @@ const Dashboard = () => {
         let url = '/api/ppcs';
         if (decodedToken.papel === 'Colaborador') {
           url = '/api/colaboradores/ppcs';
+        } else if (decodedToken.papel === 'Avaliador') {
+          url = '/api/avaliadores/ppcs';
         }
 
         const response = await axios.get(url, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
-        setPPCs(response.data);
+        const ppcsEmCriacao = response.data.filter(ppc => ppc.status === 'Em Criacao');
+        setPPCs(ppcsEmCriacao);
       } catch (error) {
         setError('Erro ao carregar PPCs');
       }
@@ -42,7 +45,18 @@ const Dashboard = () => {
         <h1>Dashboard</h1>
         <ul className="nav-links">
           <li><Link to="/dashboard">Home</Link></li>
-          <li><Link to="/ppcs">Gerenciar PPCs</Link></li>
+          {(role === 'Coordenador' || role === 'Colaborador') && (
+            <>
+              <li><Link to="/ppcs">Gerenciar PPCs</Link></li>
+              <li><Link to="/ppcs_ja_avaliados">PPCs Avaliados</Link></li>
+            </>
+          )}
+          {role === 'Avaliador' && (
+            <>
+              <li><Link to="/ppcs/nao_avaliados">PPCs Não Avaliados</Link></li>
+              <li><Link to="/ppcs/avaliados">PPCs Avaliados</Link></li>
+            </>
+          )}
           <li><Link to="/profile">Perfil</Link></li>
         </ul>
       </nav>
@@ -61,16 +75,10 @@ const Dashboard = () => {
             <div key={ppc.id} className="ppc-item">
               <h3>{ppc.titulo}</h3>
               <p>{ppc.descricao}</p>
-              {role === 'Coordenador' || (role === 'Colaborador' && ppc.colaboradores.includes(String(userId))) ? (
+              {(role === 'Coordenador' || (role === 'Colaborador' && ppc.colaboradores.includes(String(userId)))) && (
                 <Link to={`/ppcs/${ppc.id}`} className="edit-link">
                   <FaPencilAlt /> Editar
                 </Link>
-              ) : (
-                role === 'Avaliador' && ppc.status === 'Em Avaliacao' && (
-                  <Link to={`/ppcs/${ppc.id}`} className="edit-link">
-                    <FaPencilAlt /> Avaliar
-                  </Link>
-                )
               )}
             </div>
           ))}

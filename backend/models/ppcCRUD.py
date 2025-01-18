@@ -77,7 +77,17 @@ class PPCCrud:
         Atualiza os dados de um PPC no banco de dados.
         """
         try:
-            cursor = conexao.cursor()
+            cursor = conexao.cursor(cursors.DictCursor)
+            
+            # Verificar o status atual do PPC
+            cursor.execute("SELECT status FROM ppc WHERE id = %s", (ppc_id,))
+            resultado = cursor.fetchone()
+            
+            if resultado and resultado['status'] in ['Em Avaliacao', 'Aprovado', 'Rejeitado']:
+                print("PPC em avaliação ou já avaliado não pode ser modificado.")
+                cursor.close()
+                return False
+
             campos = []
             valores = []
 
@@ -104,6 +114,7 @@ class PPCCrud:
             if cursor:
                 cursor.close()
             return False
+
 
     @staticmethod
     def deletar(ppc_id):
@@ -142,7 +153,6 @@ class PPCCrud:
                 cursor.close()
             return []
 
-
     @staticmethod
     def listar_por_colaborador(colaborador_id):
         """
@@ -178,3 +188,26 @@ class PPCCrud:
             if cursor:
                 cursor.close()
             return []
+
+@staticmethod
+def criar(titulo, descricao, coordenador_id, arquivo=None):
+    try:
+        cursor = mysql.connection.cursor()
+        query = """
+            INSERT INTO ppc (titulo, descricao, coordenador_id, status, arquivo)
+            VALUES (%s, %s, %s, 'Em Criacao', %s)
+        """
+        valores = (titulo, descricao, coordenador_id, arquivo)
+        cursor.execute(query, valores)
+        mysql.connection.commit()
+        ppc_id = cursor.lastrowid
+        cursor.close()
+        print("PPC criado com sucesso!")
+
+        ppc = PPC(id=ppc_id, titulo=titulo, descricao=descricao, coordenador_id=coordenador_id, arquivo=arquivo)
+        return ppc
+    except Error as e:
+        print(f"Erro ao criar PPC: {e}")
+        if cursor:
+            cursor.close()
+        return None

@@ -76,6 +76,8 @@ const EditPPC = () => {
     }
   };
 
+  const isEditable = ppc && ppc.status === 'Em Criacao';
+
   return (
     <div>
       <h1>Editar PPC</h1>
@@ -91,6 +93,7 @@ const EditPPC = () => {
               type="text"
               value={ppc.titulo}
               onChange={(e) => setPPC({ ...ppc, titulo: e.target.value })}
+              disabled={!isEditable}
             />
           </label>
           <label>
@@ -98,10 +101,11 @@ const EditPPC = () => {
             <textarea
               value={ppc.descricao}
               onChange={(e) => setPPC({ ...ppc, descricao: e.target.value })}
+              disabled={!isEditable}
             />
           </label>
-          <button onClick={handleSave}>Salvar</button>
-          {role === 'Coordenador' && (
+          <button onClick={handleSave} disabled={!isEditable}>Salvar</button>
+          {role === 'Coordenador' && isEditable && (
             <div>
               <div>
                 <label>

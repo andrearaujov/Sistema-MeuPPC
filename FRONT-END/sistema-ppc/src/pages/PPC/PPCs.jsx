@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import './PPCs.css';
 
 const PPCs = () => {
@@ -50,6 +50,7 @@ const PPCs = () => {
     console.log('Colaboradores:', ppc.colaboradores);
     console.log('Role dentro do filtro:', role);
     console.log('User ID dentro do filtro:', userId);
+    if (ppc.status !== 'Em Criacao') return false;
     if (role === 'Coordenador') return true;
     if (role === 'Colaborador') {
       const incluiColaborador = ppc.colaboradores.includes(String(userId));

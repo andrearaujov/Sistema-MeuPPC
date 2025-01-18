@@ -1,0 +1,36 @@
+.ppc-list {
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .ppc-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+  
+  .ppc-item h3 {
+    margin: 0 0 10px 0;
+  }
+  
+  .edit-link {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #28a745;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .edit-link:hover {
+    background-color: #218838;
+  }
+  
+  .error {
+    color: #dc3545;
+    margin-top: 10px;
+  }
+  

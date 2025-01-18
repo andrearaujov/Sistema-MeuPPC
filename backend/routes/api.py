@@ -174,6 +174,7 @@ def list_ppcs():
         user_id = decoded_token['id']
 
         ppcs = ppc_crud.listar_por_usuario(user_id)  # Novo método para listar PPCs do usuário
+        ppcs_em_criacao = [ppc for ppc in ppcs if ppc.status == 'Em Criacao']  # Filtra PPCs em criação
         ppcs_dict = [
             {
                 'id': ppc.id,
@@ -184,7 +185,7 @@ def list_ppcs():
                 'colaboradores': ppc.colaboradores,
                 'avaliadores': ppc.avaliadores
             }
-            for ppc in ppcs
+            for ppc in ppcs_em_criacao
         ]
         return jsonify(ppcs_dict), 200
 
@@ -432,3 +433,227 @@ def listar_ppcs_colaborador():
     except Exception as e:
         print(f"Erro interno do servidor: {str(e)}")  # Log do erro
         return jsonify({'error': f'Erro interno do servidor: {str(e)}'}), 500
+
+@api_bp.route('/avaliadores/ppcs', methods=['GET'])
+def listar_ppcs_avaliador():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({'error': 'Cabeçalho de autorização não encontrado'}), 401
+
+    try:
+        token = auth_header.split()[1]
+        decoded_token = jwt.decode(token, Config.SECRET_KEY, algorithms=['HS256'])
+        avaliador_id = decoded_token['id']
+        
+        cursor = mysql.connection.cursor(cursors.DictCursor)
+        query = """
+            SELECT ppc.*, GROUP_CONCAT(ppc_avaliadores.avaliador_id) as avaliadores
+            FROM ppc
+            INNER JOIN ppc_avaliadores ON ppc.id = ppc_avaliadores.ppc_id
+            WHERE ppc_avaliadores.avaliador_id = %s
+            GROUP BY ppc.id
+            ORDER BY ppc.created_at DESC  -- Ordena pelos mais recentes
+        """
+        cursor.execute(query, (avaliador_id,))
+        resultados = cursor.fetchall()
+        cursor.close()
+
+        print(f"Resultados da consulta: {resultados}")  # Log de depuração
+
+        ppcs = []
+        for resultado in resultados:
+            resultado.pop('avaliadores', None)  # Remove o campo avaliadores antes de criar a instância
+            ppc = PPC(**resultado)
+            ppcs.append(ppc)
+
+        # Remover o atributo 'estrategia' antes de serializar
+        ppcs_serializaveis = []
+        for ppc in ppcs:
+            ppc_dict = ppc.__dict__
+            if 'estrategia' in ppc_dict:
+                del ppc_dict['estrategia']
+            ppcs_serializaveis.append(ppc_dict)
+
+        print(f"PPCs serializáveis: {ppcs_serializaveis}")  # Log de depuração
+
+        return jsonify(ppcs_serializaveis), 200
+    except jwt.ExpiredSignatureError:
+        return jsonify({'error': 'Token expirado, por favor faça login novamente'}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({'error': 'Token inválido, por favor faça login novamente'}), 401
+    except Exception as e:
+        print(f"Erro interno do servidor: {str(e)}")
+        return jsonify({'error': f'Erro interno do servidor: {str(e)}'}), 500
+
+@api_bp.route('/ppcs/<int:ppc_id>/avaliacao', methods=['POST'])
+def salvar_avaliacao(ppc_id):
+    data = request.get_json()
+    avaliacao = data.get('evaluation')
+    comentarios = data.get('comments')
+
+    if not avaliacao:
+        return jsonify({'error': 'A avaliação é obrigatória'}), 400
+
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({'error': 'Cabeçalho de autorização não encontrado'}), 401
+
+    try:
+        token = auth_header.split()[1]
+        decoded_token = jwt.decode(token, Config.SECRET_KEY, algorithms=['HS256'])
+        avaliador_id = decoded_token['id']
+
+        cursor = mysql.connection.cursor()
+        
+        if avaliacao == 'aprovado':
+            query = "UPDATE ppc SET status = 'Aprovado', motivo_rejeicao = NULL WHERE id = %s"
+            cursor.execute(query, (ppc_id,))
+        elif avaliacao == 'desaprovado':
+            query = "UPDATE ppc SET status = 'Rejeitado', motivo_rejeicao = %s WHERE id = %s"
+            cursor.execute(query, (comentarios, ppc_id))
+        
+        mysql.connection.commit()
+        cursor.close()
+
+        return jsonify({'message': 'Avaliação salva com sucesso'}), 201
+    except jwt.ExpiredSignatureError:
+        return jsonify({'error': 'Token expirado, por favor faça login novamente'}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({'error': 'Token inválido, por favor faça login novamente'}), 401
+    except Error as e:
+        return jsonify({'error': f'Erro ao salvar avaliação: {e}'}), 500
+    except Exception as e:
+        return jsonify({'error': f'Erro interno do servidor: {e}'}), 500
+
+@api_bp.route('/avaliadores/ppcs/nao_avaliados', methods=['GET'])
+def listar_ppcs_nao_avaliados():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({'error': 'Cabeçalho de autorização não encontrado'}), 401
+
+    try:
+        token = auth_header.split()[1]
+        decoded_token = jwt.decode(token, Config.SECRET_KEY, algorithms=['HS256'])
+        avaliador_id = decoded_token['id']
+
+        cursor = mysql.connection.cursor(cursors.DictCursor)
+        query = """
+            SELECT ppc.*
+            FROM ppc
+            INNER JOIN ppc_avaliadores ON ppc.id = ppc_avaliadores.ppc_id
+            WHERE ppc_avaliadores.avaliador_id = %s AND ppc.status = 'Em Avaliacao'
+            GROUP BY ppc.id
+            ORDER BY ppc.created_at DESC
+        """
+        cursor.execute(query, (avaliador_id,))
+        resultados = cursor.fetchall()
+        cursor.close()
+
+        ppcs_serializaveis = [resultado for resultado in resultados]
+        
+        return jsonify(ppcs_serializaveis), 200
+    except jwt.ExpiredSignatureError:
+        return jsonify({'error': 'Token expirado, por favor faça login novamente'}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({'error': 'Token inválido, por favor faça login novamente'}), 401
+    except Exception as e:
+        return jsonify({'error': f'Erro interno do servidor: {e}'}), 500
+@api_bp.route('/avaliadores/ppcs/avaliados', methods=['GET'])
+def listar_ppcs_avaliados():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({'error': 'Cabeçalho de autorização não encontrado'}), 401
+
+    try:
+        token = auth_header.split()[1]
+        decoded_token = jwt.decode(token, Config.SECRET_KEY, algorithms=['HS256'])
+        avaliador_id = decoded_token['id']
+
+        cursor = mysql.connection.cursor(cursors.DictCursor)
+        query = """
+            SELECT ppc.*
+            FROM ppc
+            INNER JOIN ppc_avaliadores ON ppc.id = ppc_avaliadores.ppc_id
+            WHERE ppc_avaliadores.avaliador_id = %s AND ppc.status IN ('Aprovado', 'Rejeitado')
+            GROUP BY ppc.id
+            ORDER BY ppc.created_at DESC
+        """
+        cursor.execute(query, (avaliador_id,))
+        resultados = cursor.fetchall()
+        cursor.close()
+
+        ppcs_serializaveis = [resultado for resultado in resultados]
+        
+        return jsonify(ppcs_serializaveis), 200
+    except jwt.ExpiredSignatureError:
+        return jsonify({'error': 'Token expirado, por favor faça login novamente'}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({'error': 'Token inválido, por favor faça login novamente'}), 401
+    except Exception as e:
+        return jsonify({'error': f'Erro interno do servidor: {e}'}), 500
+
+@api_bp.route('/colaboradores/ppcs_avaliados', methods=['GET'])
+def listar_ppcs_avaliados_colaboradores():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({'error': 'Cabeçalho de autorização não encontrado'}), 401
+
+    try:
+        token = auth_header.split()[1]
+        decoded_token = jwt.decode(token, Config.SECRET_KEY, algorithms=['HS256'])
+        colaborador_id = decoded_token['id']
+
+        cursor = mysql.connection.cursor(cursors.DictCursor)
+        query = """
+            SELECT ppc.*
+            FROM ppc
+            INNER JOIN ppc_colaboradores ON ppc.id = ppc_colaboradores.ppc_id
+            WHERE ppc_colaboradores.colaborador_id = %s AND ppc.status IN ('Aprovado', 'Rejeitado')
+            GROUP BY ppc.id
+            ORDER BY ppc.created_at DESC
+        """
+        cursor.execute(query, (colaborador_id,))
+        resultados = cursor.fetchall()
+        cursor.close()
+
+        ppcs_serializaveis = [resultado for resultado in resultados]
+        
+        return jsonify(ppcs_serializaveis), 200
+    except jwt.ExpiredSignatureError:
+        return jsonify({'error': 'Token expirado, por favor faça login novamente'}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({'error': 'Token inválido, por favor faça login novamente'}), 401
+    except Exception as e:
+        return jsonify({'error': f'Erro interno do servidor: {e}'}), 500
+
+@api_bp.route('/coordenadores/ppcs_avaliados', methods=['GET'])
+def listar_ppcs_avaliados_coordenadores():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({'error': 'Cabeçalho de autorização não encontrado'}), 401
+
+    try:
+        token = auth_header.split()[1]
+        decoded_token = jwt.decode(token, Config.SECRET_KEY, algorithms=['HS256'])
+        coordenador_id = decoded_token['id']
+
+        cursor = mysql.connection.cursor(cursors.DictCursor)
+        query = """
+            SELECT ppc.*
+            FROM ppc
+            WHERE ppc.coordenador_id = %s AND ppc.status IN ('Aprovado', 'Rejeitado')
+            ORDER BY ppc.created_at DESC
+        """
+        cursor.execute(query, (coordenador_id,))
+        resultados = cursor.fetchall()
+        cursor.close()
+
+        ppcs_serializaveis = [resultado for resultado in resultados]
+        
+        return jsonify(ppcs_serializaveis), 200
+    except jwt.ExpiredSignatureError:
+        return jsonify({'error': 'Token expirado, por favor faça login novamente'}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({'error': 'Token inválido, por favor faça login novamente'}), 401
+    except Exception as e:
+        return jsonify({'error': f'Erro interno do servidor: {e}'}), 500
