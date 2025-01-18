@@ -141,3 +141,40 @@ class PPCCrud:
             if cursor:
                 cursor.close()
             return []
+
+
+    @staticmethod
+    def listar_por_colaborador(colaborador_id):
+        """
+        Lista todos os PPCs aos quais um colaborador foi adicionado.
+        """
+        try:
+            cursor = mysql.connection.cursor(cursors.DictCursor)
+            print(f"Buscando PPCs para colaborador_id: {colaborador_id}")  # Log de depuração
+
+            query = """
+                SELECT ppc.*, GROUP_CONCAT(ppc_colaboradores.colaborador_id) as colaboradores
+                FROM ppc
+                INNER JOIN ppc_colaboradores ON ppc.id = ppc_colaboradores.ppc_id
+                WHERE ppc_colaboradores.colaborador_id = %s
+                GROUP BY ppc.id
+            """
+            cursor.execute(query, (colaborador_id,))
+            resultados = cursor.fetchall()
+            cursor.close()
+            print(f"Resultados da consulta: {resultados}")  # Log de depuração
+
+            ppcs = [PPC(**resultado) for resultado in resultados]
+            for ppc in ppcs:
+                if ppc.colaboradores:
+                    ppc.colaboradores = ppc.colaboradores.split(',')  # Converter string para lista
+                else:
+                    ppc.colaboradores = []
+            
+            print(f"PPCs formatados: {[ppc.__dict__ for ppc in ppcs]}")  # Log de depuração
+            return ppcs
+        except Error as e:
+            print(f"Erro ao listar PPCs por colaborador: {e}")
+            if cursor:
+                cursor.close()
+            return []

@@ -1,23 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';  // Alteração: Importando useNavigate
+import {jwtDecode} from 'jwt-decode';
 import './EditPPC.css';
 
 const EditPPC = () => {
   const { id } = useParams();
-  const [titulo, setTitulo] = useState('');
-  const [descricao, setDescricao] = useState('');
-  const [colaboradorEmail, setColaboradorEmail] = useState('');
-  const [avaliadoresIds, setAvaliadoresIds] = useState('');
+  const navigate = useNavigate();  // Alteração: Criando uma instância de useNavigate
+  const [ppc, setPPC] = useState(null);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
+  const [role, setRole] = useState('');
+  const [newCollaboratorEmail, setNewCollaboratorEmail] = useState(''); // Novo estado para email do colaborador
+  const [avaliadoresIds, setAvaliadoresIds] = useState(''); // Novo estado para IDs dos avaliadores
 
   useEffect(() => {
     const fetchPPC = async () => {
       try {
-        const response = await axios.get(`/api/ppcs/${id}`);
-        setTitulo(response.data.titulo);
-        setDescricao(response.data.descricao);
+        const token = localStorage.getItem('token');
+        const decodedToken = jwtDecode(token);
+        setRole(decodedToken.papel);
+
+        const response = await axios.get(`/api/ppcs/${id}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        setPPC(response.data);
       } catch (error) {
         setError('Erro ao carregar PPC');
       }
@@ -26,45 +33,45 @@ const EditPPC = () => {
     fetchPPC();
   }, [id]);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSave = async () => {
     try {
-      const token = localStorage.getItem('token');  // Supondo que o token está armazenado no localStorage
-      await axios.put(`/api/ppcs/${id}`, { titulo, descricao }, { 
-        headers: { 'Authorization': `Bearer ${token}` } 
+      const token = localStorage.getItem('token');
+      console.log('Dados a serem salvos:', ppc);  // Log dos dados a serem salvos
+      const response = await axios.put(`/api/ppcs/${id}`, ppc, {
+        headers: { 'Authorization': `Bearer ${token}` }
       });
-      navigate('/ppcs');
+      console.log('Resposta do servidor:', response.data);  // Log da resposta do servidor
+      alert('PPC salvo com sucesso!');
+      navigate('/dashboard');  // Alteração: Redirecionando para o dashboard após salvar
     } catch (error) {
-      setError('Erro ao atualizar PPC');
+      console.error('Erro ao salvar PPC:', error);
+      setError('Erro ao salvar PPC');
     }
   };
 
-  const handleAddColaborador = async (event) => {
-    event.preventDefault();
+  const handleAddCollaborator = async () => {
     try {
-      const token = localStorage.getItem('token');  // Supondo que o token está armazenado no localStorage
-      await axios.post(`/api/ppcs/${id}/colaboradores`, 
-        { email: colaboradorEmail }, 
-        { headers: { 'Authorization': `Bearer ${token}` } }
-      );
-      setColaboradorEmail('');  // Limpa o campo de email
-      setError('');  // Limpa os erros se o colaborador for adicionado com sucesso
+      const token = localStorage.getItem('token');
+      const response = await axios.post(`/api/ppcs/${id}/colaboradores`, { email: newCollaboratorEmail }, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      alert('Colaborador adicionado com sucesso!');
+      setNewCollaboratorEmail('');
     } catch (error) {
+      console.error('Erro ao adicionar colaborador:', error);
       setError('Erro ao adicionar colaborador');
     }
   };
 
-  const handleSendForEvaluation = async (event) => {
-    event.preventDefault();
+  const handleSendForReview = async () => {
     try {
-      const token = localStorage.getItem('token');  // Supondo que o token está armazenado no localStorage
-      const avaliadoresArray = avaliadoresIds.split(',').map(id => id.trim());
-      await axios.post(`/api/ppcs/${id}/enviar_para_avaliacao`, 
-        { avaliadores_ids: avaliadoresArray }, 
-        { headers: { 'Authorization': `Bearer ${token}` } }
-      );
-      navigate('/ppcs');
+      const token = localStorage.getItem('token');
+      const response = await axios.post(`/api/ppcs/${id}/enviar_para_avaliacao`, { avaliadores_ids: avaliadoresIds.split(',') }, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      alert('PPC enviado para avaliação com sucesso!');
     } catch (error) {
+      console.error('Erro ao enviar para avaliação:', error);
       setError('Erro ao enviar para avaliação');
     }
   };
@@ -72,53 +79,58 @@ const EditPPC = () => {
   return (
     <div>
       <h1>Editar PPC</h1>
+      <nav>
+        <Link to="/ppcs">Voltar</Link>
+      </nav>
       {error && <p className="error">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div className="input-field">
-          <input
-            type="text"
-            placeholder="Título"
-            required
-            value={titulo}
-            onChange={(e) => setTitulo(e.target.value)}
-          />
+      {ppc && (
+        <div className="ppc-edit-form">
+          <label>
+            Título:
+            <input
+              type="text"
+              value={ppc.titulo}
+              onChange={(e) => setPPC({ ...ppc, titulo: e.target.value })}
+            />
+          </label>
+          <label>
+            Descrição:
+            <textarea
+              value={ppc.descricao}
+              onChange={(e) => setPPC({ ...ppc, descricao: e.target.value })}
+            />
+          </label>
+          <button onClick={handleSave}>Salvar</button>
+          {role === 'Coordenador' && (
+            <div>
+              <div>
+                <label>
+                  Adicionar Colaborador:
+                  <input
+                    type="email"
+                    value={newCollaboratorEmail}
+                    onChange={(e) => setNewCollaboratorEmail(e.target.value)}
+                    placeholder="Email do colaborador"
+                  />
+                </label>
+                <button onClick={handleAddCollaborator}>Adicionar Colaborador</button>
+              </div>
+              <div>
+                <label>
+                  Enviar para Avaliação:
+                  <input
+                    type="text"
+                    value={avaliadoresIds}
+                    onChange={(e) => setAvaliadoresIds(e.target.value)}
+                    placeholder="IDs dos avaliadores, separados por vírgula"
+                  />
+                </label>
+                <button onClick={handleSendForReview}>Enviar para Avaliação</button>
+              </div>
+            </div>
+          )}
         </div>
-        <div className="input-field">
-          <textarea
-            placeholder="Descrição"
-            required
-            value={descricao}
-            onChange={(e) => setDescricao(e.target.value)}
-          ></textarea>
-        </div>
-        <button type="submit">Atualizar</button>
-      </form>
-      <h2>Adicionar Colaborador</h2>
-      <form onSubmit={handleAddColaborador}>
-        <div className="input-field">
-          <input
-            type="email"
-            placeholder="Email do Colaborador"
-            required
-            value={colaboradorEmail}
-            onChange={(e) => setColaboradorEmail(e.target.value)}
-          />
-        </div>
-        <button type="submit">Adicionar Colaborador</button>
-      </form>
-      <h2>Enviar para Avaliação</h2>
-      <form onSubmit={handleSendForEvaluation}>
-        <div className="input-field">
-          <input
-            type="text"
-            placeholder="IDs dos Avaliadores (separados por vírgula)"
-            required
-            value={avaliadoresIds}
-            onChange={(e) => setAvaliadoresIds(e.target.value)}
-          />
-        </div>
-        <button type="submit">Enviar para Avaliação</button>
-      </form>
+      )}
     </div>
   );
 };

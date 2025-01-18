@@ -1,36 +1,130 @@
+/* Estilização geral */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  color: #333;
+  text-align: center;
+  margin-top: 20px;
+}
+
+nav {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+nav a {
+  color: #007bff;
+  text-decoration: none;
+  margin: 0 10px;
+  font-size: 16px;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+.error {
+  color: red;
+  text-align: center;
+  font-size: 18px;
+}
+
 .ppc-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .ppc-item {
-    border: 1px solid #ccc;
-    padding: 20px;
-    border-radius: 5px;
-  }
-  
-  .ppc-item h2 {
-    margin: 0;
-    font-size: 24px;
-  }
-  
-  .create-link {
-    margin-top: 20px;
-    display: inline-block;
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-  }
-  
-  .create-link:hover {
-    background-color: #0056b3;
-  }
-  
-  .error {
-    color: red;
-    margin-top: 10px;
-  }
-  
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.ppc-item {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 300px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.ppc-item:hover {
+  transform: translateY(-5px);
+}
+
+.ppc-item h2 {
+  color: #007bff;
+  font-size: 22px;
+  margin-top: 0;
+}
+
+.ppc-item p {
+  color: #555;
+  font-size: 16px;
+}
+
+.create-link {
+  display: block;
+  text-align: center;
+  margin: 20px 0;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.create-link:hover {
+  background-color: #0056b3;
+}
+
+/* Estilização da página de edição */
+.ppc-edit-form {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px;
+  width: 400px;
+  margin: 20px auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ppc-edit-form label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.ppc-edit-form input,
+.ppc-edit-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.ppc-edit-form button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.ppc-edit-form button:hover {
+  background-color: #0056b3;
+}
+
+.ppc-edit-form button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

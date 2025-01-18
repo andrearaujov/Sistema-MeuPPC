@@ -1,17 +1,15 @@
-# models/ppc.py
-
 from utils.database import mysql
 from models.estrategiaStatus import EstrategiaStatus, AprovadoStrategy, EmCriacaoStrategy, EmAvaliacaoStrategy
 
 class PPC:
     def __init__(self, id=None, titulo=None, descricao=None, status="Em Criacao", motivo_rejeicao=None,
-                 coordenador_id=None, created_at=None, updated_at=None):
+                 coordenador_id=None, created_at=None, updated_at=None, colaboradores=None):
         self.id = id
         self.titulo = titulo
         self.descricao = descricao
         self.motivo_rejeicao = motivo_rejeicao
         self.coordenador_id = coordenador_id
-        self.colaboradores = []
+        self.colaboradores = colaboradores if colaboradores is not None else []
         self.avaliadores = []
         self.created_at = created_at
         self.updated_at = updated_at

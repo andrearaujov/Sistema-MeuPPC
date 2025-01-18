@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 from MySQLdb import Error
 import datetime
+from flask_mysqldb import MySQL, cursors
 from config import Config
 import MySQLdb.cursors
 from models.pessoaCrud import PessoaCRUD
@@ -211,10 +212,25 @@ def update_ppc(ppc_id):
         token = auth_header.split()[1]
         decoded_token = jwt.decode(token, Config.SECRET_KEY, algorithms=['HS256'])
         user_id = decoded_token['id']
+        user_role = decoded_token['papel']
 
         cursor = mysql.connection.cursor()
-        query = "UPDATE ppc SET titulo = %s, descricao = %s WHERE id = %s AND coordenador_id = %s"
-        cursor.execute(query, (titulo, descricao, ppc_id, user_id))
+
+        # Permitir que coordenadores e colaboradores editem os PPCs
+        if user_role == 'Coordenador':
+            query = "UPDATE ppc SET titulo = %s, descricao = %s WHERE id = %s AND coordenador_id = %s"
+            cursor.execute(query, (titulo, descricao, ppc_id, user_id))
+        elif user_role == 'Colaborador':
+            query = """
+                UPDATE ppc p
+                INNER JOIN ppc_colaboradores pc ON p.id = pc.ppc_id
+                SET p.titulo = %s, p.descricao = %s
+                WHERE p.id = %s AND pc.colaborador_id = %s
+            """
+            cursor.execute(query, (titulo, descricao, ppc_id, user_id))
+        else:
+            return jsonify({'error': 'Usuário não autorizado'}), 403
+
         mysql.connection.commit()
         cursor.close()
 
@@ -364,6 +380,7 @@ def enviar_para_avaliacao(ppc_id):
         logging.error(f'Erro interno do servidor: {e}')
         return jsonify({'error': f'Erro interno do servidor: {e}'}), 500
 
+
 @api_bp.route('/colaboradores/ppcs', methods=['GET'])
 def listar_ppcs_colaborador():
     auth_header = request.headers.get('Authorization')
@@ -374,11 +391,44 @@ def listar_ppcs_colaborador():
         token = auth_header.split()[1]
         decoded_token = jwt.decode(token, Config.SECRET_KEY, algorithms=['HS256'])
         colaborador_id = decoded_token['id']
-        ppcs = PPCCrud.listar_por_colaborador(colaborador_id)
-        return jsonify([ppc.__dict__ for ppc in ppcs]), 200
+        
+        cursor = mysql.connection.cursor(cursors.DictCursor)
+        query = """
+            SELECT ppc.*, GROUP_CONCAT(ppc_colaboradores.colaborador_id) as colaboradores
+            FROM ppc
+            INNER JOIN ppc_colaboradores ON ppc.id = ppc_colaboradores.ppc_id
+            WHERE ppc_colaboradores.colaborador_id = %s
+            GROUP BY ppc.id
+            ORDER BY ppc.created_at DESC  -- Ordena pelos mais recentes
+        """
+        cursor.execute(query, (colaborador_id,))
+        resultados = cursor.fetchall()
+        cursor.close()
+        
+        print(f"Resultados da consulta: {resultados}")  # Log de depuração
+        
+        ppcs = [PPC(**resultado) for resultado in resultados]
+        for ppc in ppcs:
+            if ppc.colaboradores:
+                ppc.colaboradores = ppc.colaboradores.split(',')  # Converter string para lista
+            else:
+                ppc.colaboradores = []
+
+        # Remover o atributo 'estrategia' antes de serializar
+        ppcs_serializaveis = []
+        for ppc in ppcs:
+            ppc_dict = ppc.__dict__
+            if 'estrategia' in ppc_dict:
+                del ppc_dict['estrategia']
+            ppcs_serializaveis.append(ppc_dict)
+
+        print(f"PPCs serializáveis: {ppcs_serializaveis}")  # Log de depuração
+        
+        return jsonify(ppcs_serializaveis), 200
     except jwt.ExpiredSignatureError:
         return jsonify({'error': 'Token expirado, por favor faça login novamente'}), 401
     except jwt.InvalidTokenError:
         return jsonify({'error': 'Token inválido, por favor faça login novamente'}), 401
     except Exception as e:
-        return jsonify({'error': f'Erro interno do servidor: {e}'}), 500
+        print(f"Erro interno do servidor: {str(e)}")  # Log do erro
+        return jsonify({'error': f'Erro interno do servidor: {str(e)}'}), 500

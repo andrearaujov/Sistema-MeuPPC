@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
@@ -10,24 +10,25 @@ const CreatePPC = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.papel !== 'Coordenador') {
+        navigate('/dashboard'); // Redireciona se o usuário não for um coordenador
+      }
+    }
+  }, [navigate]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      // Recupera o token do localStorage
       const token = localStorage.getItem('token');
-
-      // Decodifica o token para obter o coordenador_id
-      const decodedToken = jwtDecode(token);
-      const coordenador_id = decodedToken.id; // Obtém o coordenador_id do token decodificado
-
-      // Faz a solicitação para criar o PPC com o cabeçalho de autorização
-      await axios.post('/api/ppcs', { titulo, descricao, coordenador_id }, {
+      await axios.post('/api/ppcs', { titulo, descricao }, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
-
-      // Redireciona para a página de PPCs
       navigate('/ppcs');
     } catch (error) {
       setError('Erro ao criar PPC');
