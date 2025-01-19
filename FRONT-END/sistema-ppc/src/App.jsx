@@ -10,7 +10,12 @@ import AvaliarPPC from './pages/PPC/AvaliarPPC';
 import PPCsNaoAvaliados from './pages/PPC/PPCsNaoAvaliados';
 import PPCsAvaliados from './pages/PPC/PPCsAvaliados';
 import PPCsJaAvaliados from './pages/PPC/PPCsJaAvaliados';
-import Profile from './pages/Profile/Profile'; // Importando o componente de perfil
+import Profile from './pages/Profile/Profile';
+import RelatorioColaboradores from './pages/Relatorio/RelatorioColaboradores';
+import RelatorioAvaliadores from './pages/Relatorio/RelatorioAvaliadores';
+import RelatorioParticipantes from './pages/Relatorio/RelatorioParticipantes';
+import SelectPPC from './pages/Relatorio/SelectPPC';
+import PPCsAvaliadosRelatorio from './pages/Relatorio/PPCsAvaliados'; // Importar o novo componente
 
 function App() {
   return (
@@ -26,7 +31,12 @@ function App() {
         <Route path="/ppcs/nao_avaliados" element={<PPCsNaoAvaliados />} />
         <Route path="/ppcs/avaliados" element={<PPCsAvaliados />} />
         <Route path="/ppcs_ja_avaliados" element={<PPCsJaAvaliados />} />
-        <Route path="/profile" element={<Profile />} /> {/* Adicionando a rota de perfil */}
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/selecionar_ppc" element={<SelectPPC />} />
+        <Route path="/ppcs/:ppc_id/relatorio_colaboradores" element={<RelatorioColaboradores />} />
+        <Route path="/ppcs/:ppc_id/relatorio_avaliadores" element={<RelatorioAvaliadores />} />
+        <Route path="/ppcs/:ppc_id/relatorio_participantes" element={<RelatorioParticipantes />} />
+        <Route path="/ppcs_avaliados" element={<PPCsAvaliadosRelatorio />} /> {/* Nova rota para PPCs avaliados */}
       </Routes>
     </Router>
   );

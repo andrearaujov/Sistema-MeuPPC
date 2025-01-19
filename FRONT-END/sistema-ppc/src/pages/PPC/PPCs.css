@@ -1,7 +1,6 @@
-/* Estilização geral */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
+  background-color: #f9f9f9;
   margin: 0;
   padding: 0;
 }
@@ -10,6 +9,7 @@ h1 {
   color: #333;
   text-align: center;
   margin-top: 20px;
+  font-size: 2em;
 }
 
 nav {
@@ -21,17 +21,20 @@ nav a {
   color: #007bff;
   text-decoration: none;
   margin: 0 10px;
-  font-size: 16px;
+  font-size: 1.2em;
+  transition: color 0.3s ease;
 }
 
 nav a:hover {
+  color: #ffdd57;
   text-decoration: underline;
 }
 
 .error {
   color: red;
   text-align: center;
-  font-size: 18px;
+  font-size: 1.2em;
+  font-weight: bold;
 }
 
 .ppc-list {
@@ -42,13 +45,12 @@ nav a:hover {
 }
 
 .ppc-item {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  width: 300px;
+  background-color: white;
   padding: 20px;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
+  width: 300px;
+  transition: transform 0.2s ease;
 }
 
 .ppc-item:hover {
@@ -57,24 +59,26 @@ nav a:hover {
 
 .ppc-item h2 {
   color: #007bff;
-  font-size: 22px;
+  font-size: 1.6em;
   margin-top: 0;
 }
 
 .ppc-item p {
   color: #555;
-  font-size: 16px;
+  font-size: 1em;
 }
 
 .create-link {
   display: block;
   text-align: center;
-  margin: 20px 0;
+  margin: 20px auto;
   padding: 10px 20px;
   background-color: #007bff;
-  color: #fff;
+  color: white;
   text-decoration: none;
-  border-radius: 5px;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
 .create-link:hover {
@@ -83,10 +87,9 @@ nav a:hover {
 
 /* Estilização da página de edição */
 .ppc-edit-form {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  background-color: white;
   padding: 20px;
+  border-radius: 8px;
   width: 400px;
   margin: 20px auto;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -95,7 +98,8 @@ nav a:hover {
 .ppc-edit-form label {
   display: block;
   margin-bottom: 10px;
-  font-size: 16px;
+  font-size: 1.2em;
+  color: #333;
 }
 
 .ppc-edit-form input,
@@ -104,8 +108,8 @@ nav a:hover {
   padding: 10px;
   margin-bottom: 15px;
   border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 16px;
+  border-radius: 8px;
+  font-size: 1em;
 }
 
 .ppc-edit-form button {
@@ -113,11 +117,12 @@ nav a:hover {
   width: 100%;
   padding: 10px;
   background-color: #007bff;
-  color: #fff;
+  color: white;
   border: none;
-  border-radius: 5px;
-  font-size: 16px;
+  border-radius: 8px;
+  font-size: 1.2em;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .ppc-edit-form button:hover {

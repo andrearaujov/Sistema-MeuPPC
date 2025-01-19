@@ -10,6 +10,7 @@ from config import Config
 import MySQLdb.cursors
 from models.pessoaCrud import PessoaCRUD
 from models.ppcCRUD import PPCCrud
+from models.relatorio import Relatorio
 from MySQLdb.cursors import DictCursor
 from models.ppc import PPC
 import logging
@@ -667,23 +668,21 @@ def listar_ppcs_avaliados_coordenadores():
 
 
 
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
 @api_bp.route('/perfil', methods=['GET'])
-@cross_origin(origins='http://localhost:5173', supports_credentials=True)
 def perfil():
-    logging.info('Rota /perfil acessada')
-    
     auth_header = request.headers.get('Authorization')
     if not auth_header:
-        logging.error('Cabeçalho de autorização não encontrado')
+        logger.error('Cabeçalho de autorização não encontrado')
         return jsonify({'error': 'Cabeçalho de autorização não encontrado'}), 401
 
     try:
         token = auth_header.split()[1]
-        logging.info('Token recebido: %s', token)
-        
         decoded_token = jwt.decode(token, Config.SECRET_KEY, algorithms=['HS256'])
         user_id = decoded_token['id']
-        logging.info('ID do usuário decodificado: %s', user_id)
 
         cursor = mysql.connection.cursor(cursors.DictCursor)
         query = "SELECT id, nome, email FROM pessoa WHERE id = %s"
@@ -692,22 +691,73 @@ def perfil():
         cursor.close()
 
         if not user:
-            logging.error('Usuário não encontrado')
+            logger.error(f'Usuário não encontrado: {user_id}')
             return jsonify({'error': 'Usuário não encontrado'}), 404
 
-        logging.info('Usuário encontrado: %s', user)
-
+        logger.info(f'Perfil do usuário carregado: {user}')
         return jsonify(user), 200
-
     except jwt.ExpiredSignatureError:
-        logging.error('Token expirado')
+        logger.error('Token expirado')
         return jsonify({'error': 'Token expirado, por favor faça login novamente'}), 401
     except jwt.InvalidTokenError:
-        logging.error('Token inválido')
+        logger.error('Token inválido')
         return jsonify({'error': 'Token inválido, por favor faça login novamente'}), 401
-    except Error as e:
-        logging.error('Erro ao obter perfil: %s', e)
-        return jsonify({'error': f'Erro ao obter perfil: {e}'}), 500
     except Exception as e:
-        logging.error('Erro interno do servidor: %s', e)
+        logger.error(f'Erro interno do servidor: {e}')
         return jsonify({'error': f'Erro interno do servidor: {e}'}), 500
+
+@api_bp.route('/ppcs/<int:ppc_id>/relatorio_colaboradores', methods=['GET'])
+def relatorio_colaboradores(ppc_id):
+    ppc = PPCCrud.buscar_por_id(ppc_id)
+    if ppc:
+        relatorio = Relatorio(ppc)
+        colaboradores = relatorio.gerarRelatorioColaboradores()
+        return jsonify(colaboradores), 200
+    return jsonify({'error': 'PPC não encontrado'}), 404
+
+@api_bp.route('/ppcs/<int:ppc_id>/relatorio_avaliadores', methods=['GET'])
+def relatorio_avaliadores(ppc_id):
+    ppc = PPCCrud.buscar_por_id(ppc_id)
+    if ppc:
+        relatorio = Relatorio(ppc)
+        avaliadores = relatorio.gerarRelatorioAvaliadores()
+        return jsonify(avaliadores), 200
+    return jsonify({'error': 'PPC não encontrado'}), 404
+
+@api_bp.route('/ppcs/<int:ppc_id>/relatorio_participantes', methods=['GET'])
+def relatorio_participantes(ppc_id):
+    ppc = PPCCrud.buscar_por_id(ppc_id)
+    if ppc:
+        relatorio = Relatorio(ppc)
+        participantes = relatorio.gerarRelatorioParticipantes()
+        return jsonify(participantes), 200
+    return jsonify({'error': 'PPC não encontrado'}), 404
+
+@api_bp.route('/ppcs_avaliados', methods=['GET'])
+def listar_todos_ppcs_avaliados():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({'error': 'Cabeçalho de autorização não encontrado'}), 401
+
+    try:
+        token = auth_header.split()[1]
+        decoded_token = jwt.decode(token, Config.SECRET_KEY, algorithms=['HS256'])
+        
+        cursor = mysql.connection.cursor(cursors.DictCursor)
+        query = """
+            SELECT * FROM ppc WHERE status IN ('Aprovado', 'Rejeitado')
+            ORDER BY created_at DESC
+        """
+        cursor.execute(query)
+        ppcs = cursor.fetchall()
+        cursor.close()
+
+        return jsonify(ppcs), 200
+    except jwt.ExpiredSignatureError:
+        return jsonify({'error': 'Token expirado, por favor faça login novamente'}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({'error': 'Token inválido, por favor faça login novamente'}), 401
+    except Exception as e:
+        return jsonify({'error': f'Erro interno do servidor: {e}'}), 500
+
+

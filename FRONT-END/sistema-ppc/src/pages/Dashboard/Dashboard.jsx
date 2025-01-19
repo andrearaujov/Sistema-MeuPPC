@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import './Dashboard.css';
-import { FaUserCircle, FaPlusCircle, FaPencilAlt } from 'react-icons/fa';
-import { jwtDecode } from 'jwt-decode';
+import { FaUserCircle, FaPlusCircle, FaPencilAlt, FaFileAlt } from 'react-icons/fa';
+import {jwtDecode} from 'jwt-decode';
 
 const Dashboard = () => {
   const [ppcs, setPPCs] = useState([]);
@@ -49,6 +49,8 @@ const Dashboard = () => {
             <>
               <li><Link to="/ppcs">Gerenciar PPCs</Link></li>
               <li><Link to="/ppcs_ja_avaliados">PPCs Avaliados</Link></li>
+              <li><Link to="/selecionar_ppc">Relatórios</Link></li>
+              <li><Link to="/ppcs_avaliados">PPCs Avaliados Relatórios</Link></li> {/* Link para PPCs Avaliados */}
             </>
           )}
           {role === 'Avaliador' && (
@@ -80,6 +82,15 @@ const Dashboard = () => {
                   <FaPencilAlt /> Editar
                 </Link>
               )}
+              <Link to={`/ppcs/${ppc.id}/relatorio_colaboradores`} className="report-link">
+                <FaFileAlt /> Relatório de Colaboradores
+              </Link>
+              <Link to={`/ppcs/${ppc.id}/relatorio_avaliadores`} className="report-link">
+                <FaFileAlt /> Relatório de Avaliadores
+              </Link>
+              <Link to={`/ppcs/${ppc.id}/relatorio_participantes`} className="report-link">
+                <FaFileAlt /> Relatório de Participantes
+              </Link>
             </div>
           ))}
         </div>

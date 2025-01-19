@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
 import './Profile.css';
 
 const Profile = () => {
@@ -15,10 +14,7 @@ const Profile = () => {
         const token = localStorage.getItem('token');
         console.log('Token:', token);
 
-        const decodedToken = jwtDecode(token);
-        console.log('Decoded Token:', decodedToken);
-
-        if (!token || !decodedToken) {
+        if (!token) {
           console.log('Redirecionando para login');
           navigate('/login');
           return;
@@ -32,7 +28,10 @@ const Profile = () => {
         setUser(response.data);
       } catch (error) {
         setError('Erro ao carregar perfil');
-        console.error('Erro ao carregar perfil:', error);
+        console.error('Erro ao carregar perfil:', error.message);
+        console.error('Erro detalhes:', error.config);
+        console.error('Erro resposta:', error.response);
+        console.error('Erro solicitação:', error.request);
       }
     };
 
