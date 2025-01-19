@@ -3,14 +3,14 @@ from models.estrategiaStatus import EstrategiaStatus, AprovadoStrategy, EmCriaca
 
 class PPC:
     def __init__(self, id=None, titulo=None, descricao=None, status="Em Criacao", motivo_rejeicao=None,
-                 coordenador_id=None, created_at=None, updated_at=None, colaboradores=None):
+                 coordenador_id=None, created_at=None, updated_at=None, colaboradores=None, avaliadores=None):
         self.id = id
         self.titulo = titulo
         self.descricao = descricao
         self.motivo_rejeicao = motivo_rejeicao
         self.coordenador_id = coordenador_id
         self.colaboradores = colaboradores if colaboradores is not None else []
-        self.avaliadores = []
+        self.avaliadores = avaliadores if avaliadores is not None else []
         self.created_at = created_at
         self.updated_at = updated_at
         self.status = status

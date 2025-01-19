@@ -189,25 +189,4 @@ class PPCCrud:
                 cursor.close()
             return []
 
-@staticmethod
-def criar(titulo, descricao, coordenador_id, arquivo=None):
-    try:
-        cursor = mysql.connection.cursor()
-        query = """
-            INSERT INTO ppc (titulo, descricao, coordenador_id, status, arquivo)
-            VALUES (%s, %s, %s, 'Em Criacao', %s)
-        """
-        valores = (titulo, descricao, coordenador_id, arquivo)
-        cursor.execute(query, valores)
-        mysql.connection.commit()
-        ppc_id = cursor.lastrowid
-        cursor.close()
-        print("PPC criado com sucesso!")
 
-        ppc = PPC(id=ppc_id, titulo=titulo, descricao=descricao, coordenador_id=coordenador_id, arquivo=arquivo)
-        return ppc
-    except Error as e:
-        print(f"Erro ao criar PPC: {e}")
-        if cursor:
-            cursor.close()
-        return None

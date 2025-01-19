@@ -2268,3 +2268,159 @@
 2025-01-18 17:36:16,980 INFO 127.0.0.1 - - [18/Jan/2025 17:36:16] "OPTIONS /api/perfil HTTP/1.1" 200 -
 2025-01-18 17:36:17,249 INFO 127.0.0.1 - - [18/Jan/2025 17:36:17] "GET /api/perfil HTTP/1.1" 200 -
 2025-01-18 17:36:17,291 INFO 127.0.0.1 - - [18/Jan/2025 17:36:17] "GET /api/perfil HTTP/1.1" 200 -
+2025-01-18 21:46:08,843 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-01-18 21:46:08,843 INFO [33mPress CTRL+C to quit[0m
+2025-01-18 21:46:08,845 INFO  * Restarting with stat
+2025-01-18 21:46:09,248 WARNING  * Debugger is active!
+2025-01-18 21:46:09,251 INFO  * Debugger PIN: 487-498-111
+2025-01-18 21:46:55,053 INFO 127.0.0.1 - - [18/Jan/2025 21:46:55] "POST /api/users/login HTTP/1.1" 200 -
+2025-01-18 21:46:55,087 INFO 127.0.0.1 - - [18/Jan/2025 21:46:55] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 21:46:55,101 INFO 127.0.0.1 - - [18/Jan/2025 21:46:55] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 21:46:59,149 INFO 127.0.0.1 - - [18/Jan/2025 21:46:59] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 21:46:59,161 INFO 127.0.0.1 - - [18/Jan/2025 21:46:59] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 21:47:00,913 INFO 127.0.0.1 - - [18/Jan/2025 21:47:00] "GET /api/coordenadores/ppcs_avaliados HTTP/1.1" 200 -
+2025-01-18 21:47:00,925 INFO 127.0.0.1 - - [18/Jan/2025 21:47:00] "GET /api/coordenadores/ppcs_avaliados HTTP/1.1" 200 -
+2025-01-18 21:47:01,941 INFO 127.0.0.1 - - [18/Jan/2025 21:47:01] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 21:47:01,953 INFO 127.0.0.1 - - [18/Jan/2025 21:47:01] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 21:47:02,655 INFO 127.0.0.1 - - [18/Jan/2025 21:47:02] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 21:47:02,671 INFO 127.0.0.1 - - [18/Jan/2025 21:47:02] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 21:47:03,726 INFO 127.0.0.1 - - [18/Jan/2025 21:47:03] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 21:47:03,741 INFO 127.0.0.1 - - [18/Jan/2025 21:47:03] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 21:47:17,456 INFO 127.0.0.1 - - [18/Jan/2025 21:47:17] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 21:47:17,471 INFO 127.0.0.1 - - [18/Jan/2025 21:47:17] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 21:52:48,039 INFO 127.0.0.1 - - [18/Jan/2025 21:52:48] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 21:52:48,053 INFO 127.0.0.1 - - [18/Jan/2025 21:52:48] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 21:53:41,848 INFO  * Detected change in 'C:\\Users\\André Araújo\\Documents\\GitHub\\Sistema-MeuPPC\\backend\\routes\\api.py', reloading
+2025-01-18 21:53:41,927 INFO  * Restarting with stat
+2025-01-18 21:53:42,562 WARNING  * Debugger is active!
+2025-01-18 21:53:42,566 INFO  * Debugger PIN: 487-498-111
+2025-01-18 21:53:55,874 INFO  * Detected change in 'C:\\Users\\André Araújo\\Documents\\GitHub\\Sistema-MeuPPC\\backend\\routes\\api.py', reloading
+2025-01-18 21:53:55,982 INFO  * Restarting with stat
+2025-01-18 21:53:56,620 WARNING  * Debugger is active!
+2025-01-18 21:53:56,623 INFO  * Debugger PIN: 487-498-111
+2025-01-18 21:54:09,071 ERROR Erro interno do servidor: PPC.__init__() got an unexpected keyword argument 'arquivo'
+2025-01-18 21:54:09,073 INFO 127.0.0.1 - - [18/Jan/2025 21:54:09] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 21:54:09,086 ERROR Erro interno do servidor: PPC.__init__() got an unexpected keyword argument 'arquivo'
+2025-01-18 21:54:09,088 INFO 127.0.0.1 - - [18/Jan/2025 21:54:09] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 21:55:09,428 INFO 127.0.0.1 - - [18/Jan/2025 21:55:09] "GET /api/ppcs HTTP/1.1" 200 -
+2025-01-18 21:55:09,446 INFO 127.0.0.1 - - [18/Jan/2025 21:55:09] "GET /api/ppcs HTTP/1.1" 200 -
+2025-01-18 22:06:55,173 INFO  * Detected change in 'C:\\Users\\André Araújo\\Documents\\GitHub\\Sistema-MeuPPC\\backend\\models\\relatorio.py', reloading
+2025-01-18 22:06:55,295 INFO  * Restarting with stat
+2025-01-18 22:06:55,903 WARNING  * Debugger is active!
+2025-01-18 22:06:55,907 INFO  * Debugger PIN: 487-498-111
+2025-01-18 22:07:07,185 INFO  * Detected change in 'C:\\Users\\André Araújo\\Documents\\GitHub\\Sistema-MeuPPC\\backend\\models\\relatorio.py', reloading
+2025-01-18 22:07:07,248 INFO  * Restarting with stat
+2025-01-18 22:07:07,902 WARNING  * Debugger is active!
+2025-01-18 22:07:07,907 INFO  * Debugger PIN: 487-498-111
+2025-01-18 22:09:12,117 INFO  * Detected change in 'C:\\Users\\André Araújo\\Documents\\GitHub\\Sistema-MeuPPC\\backend\\models\\relatorio.py', reloading
+2025-01-18 22:09:12,275 INFO  * Restarting with stat
+2025-01-18 22:09:12,906 WARNING  * Debugger is active!
+2025-01-18 22:09:12,911 INFO  * Debugger PIN: 487-498-111
+2025-01-18 22:11:30,459 INFO  * Detected change in 'C:\\Users\\André Araújo\\Documents\\GitHub\\Sistema-MeuPPC\\backend\\routes\\api.py', reloading
+2025-01-18 22:11:30,513 INFO  * Restarting with stat
+2025-01-18 22:25:27,066 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-01-18 22:25:27,066 INFO [33mPress CTRL+C to quit[0m
+2025-01-18 22:25:27,068 INFO  * Restarting with stat
+2025-01-18 22:25:27,545 WARNING  * Debugger is active!
+2025-01-18 22:25:27,549 INFO  * Debugger PIN: 487-498-111
+2025-01-18 22:25:36,187 ERROR Erro interno do servidor: PPC.__init__() got an unexpected keyword argument 'avaliadores'
+2025-01-18 22:25:36,188 INFO 127.0.0.1 - - [18/Jan/2025 22:25:36] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 22:25:36,204 ERROR Erro interno do servidor: PPC.__init__() got an unexpected keyword argument 'avaliadores'
+2025-01-18 22:25:36,205 INFO 127.0.0.1 - - [18/Jan/2025 22:25:36] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 22:25:44,744 ERROR Erro interno do servidor: PPC.__init__() got an unexpected keyword argument 'avaliadores'
+2025-01-18 22:25:44,745 INFO 127.0.0.1 - - [18/Jan/2025 22:25:44] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 22:25:44,763 ERROR Erro interno do servidor: PPC.__init__() got an unexpected keyword argument 'avaliadores'
+2025-01-18 22:25:44,765 INFO 127.0.0.1 - - [18/Jan/2025 22:25:44] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 22:25:58,610 ERROR Erro interno do servidor: PPC.__init__() got an unexpected keyword argument 'avaliadores'
+2025-01-18 22:25:58,611 INFO 127.0.0.1 - - [18/Jan/2025 22:25:58] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 22:25:58,627 ERROR Erro interno do servidor: PPC.__init__() got an unexpected keyword argument 'avaliadores'
+2025-01-18 22:25:58,628 INFO 127.0.0.1 - - [18/Jan/2025 22:25:58] "[35m[1mGET /api/ppcs HTTP/1.1[0m" 500 -
+2025-01-18 22:27:54,495 INFO  * Detected change in 'C:\\Users\\André Araújo\\Documents\\GitHub\\Sistema-MeuPPC\\backend\\models\\ppc.py', reloading
+2025-01-18 22:27:54,611 INFO  * Restarting with stat
+2025-01-18 22:27:55,221 WARNING  * Debugger is active!
+2025-01-18 22:27:55,226 INFO  * Debugger PIN: 487-498-111
+2025-01-18 22:27:55,494 INFO 127.0.0.1 - - [18/Jan/2025 22:27:55] "GET /api/ppcs HTTP/1.1" 200 -
+2025-01-18 22:27:55,512 INFO 127.0.0.1 - - [18/Jan/2025 22:27:55] "GET /api/ppcs HTTP/1.1" 200 -
+2025-01-18 22:30:13,603 INFO 127.0.0.1 - - [18/Jan/2025 22:30:13] "GET /api/ppcs HTTP/1.1" 200 -
+2025-01-18 22:30:13,618 INFO 127.0.0.1 - - [18/Jan/2025 22:30:13] "GET /api/ppcs HTTP/1.1" 200 -
+2025-01-18 22:33:03,506 INFO 127.0.0.1 - - [18/Jan/2025 22:33:03] "GET /api/ppcs HTTP/1.1" 200 -
+2025-01-18 22:33:03,522 INFO 127.0.0.1 - - [18/Jan/2025 22:33:03] "GET /api/ppcs HTTP/1.1" 200 -
+2025-01-18 22:39:13,062 INFO 127.0.0.1 - - [18/Jan/2025 22:39:13] "GET /api/ppcs HTTP/1.1" 200 -
+2025-01-18 22:39:13,078 INFO 127.0.0.1 - - [18/Jan/2025 22:39:13] "GET /api/ppcs HTTP/1.1" 200 -
+2025-01-18 22:44:39,650 INFO 127.0.0.1 - - [18/Jan/2025 22:44:39] "GET /api/ppcs HTTP/1.1" 200 -
+2025-01-18 22:44:39,659 INFO 127.0.0.1 - - [18/Jan/2025 22:44:39] "GET /api/ppcs HTTP/1.1" 200 -
+2025-01-18 22:48:47,771 INFO  * Detected change in 'C:\\Users\\André Araújo\\Documents\\GitHub\\Sistema-MeuPPC\\backend\\models\\relatorio.py', reloading
+2025-01-18 22:48:47,822 INFO  * Restarting with stat
+2025-01-18 22:48:48,274 WARNING  * Debugger is active!
+2025-01-18 22:48:48,278 INFO  * Debugger PIN: 487-498-111
+2025-01-18 22:50:24,982 INFO  * Detected change in 'C:\\Users\\André Araújo\\Documents\\GitHub\\Sistema-MeuPPC\\backend\\routes\\api.py', reloading
+2025-01-18 22:50:25,078 INFO  * Restarting with stat
+2025-01-18 22:50:25,649 WARNING  * Debugger is active!
+2025-01-18 22:50:25,652 INFO  * Debugger PIN: 487-498-111
+2025-01-18 22:50:27,749 INFO  * Detected change in 'C:\\Users\\André Araújo\\Documents\\GitHub\\Sistema-MeuPPC\\backend\\routes\\api.py', reloading
+2025-01-18 22:50:27,830 INFO  * Restarting with stat
+2025-01-18 22:50:28,305 WARNING  * Debugger is active!
+2025-01-18 22:50:28,309 INFO  * Debugger PIN: 487-498-111
+2025-01-18 22:50:31,418 INFO  * Detected change in 'C:\\Users\\André Araújo\\Documents\\GitHub\\Sistema-MeuPPC\\backend\\routes\\api.py', reloading
+2025-01-18 22:50:31,471 INFO  * Restarting with stat
+2025-01-18 22:50:32,035 WARNING  * Debugger is active!
+2025-01-18 22:50:32,041 INFO  * Debugger PIN: 487-498-111
+2025-01-18 22:52:11,174 ERROR Token expirado
+2025-01-18 22:52:11,175 INFO 127.0.0.1 - - [18/Jan/2025 22:52:11] "[31m[1mGET /api/ppcs HTTP/1.1[0m" 401 -
+2025-01-18 22:52:11,182 ERROR Token expirado
+2025-01-18 22:52:11,182 INFO 127.0.0.1 - - [18/Jan/2025 22:52:11] "[31m[1mGET /api/ppcs HTTP/1.1[0m" 401 -
+2025-01-18 22:52:40,013 ERROR Token expirado
+2025-01-18 22:52:40,013 INFO 127.0.0.1 - - [18/Jan/2025 22:52:40] "[31m[1mGET /api/ppcs HTTP/1.1[0m" 401 -
+2025-01-18 22:52:40,023 ERROR Token expirado
+2025-01-18 22:52:40,024 INFO 127.0.0.1 - - [18/Jan/2025 22:52:40] "[31m[1mGET /api/ppcs HTTP/1.1[0m" 401 -
+2025-01-18 22:56:26,477 ERROR Token expirado
+2025-01-18 22:56:26,478 INFO 127.0.0.1 - - [18/Jan/2025 22:56:26] "[31m[1mGET /api/ppcs HTTP/1.1[0m" 401 -
+2025-01-18 22:56:50,949 INFO  * Detected change in 'C:\\Users\\André Araújo\\Documents\\GitHub\\Sistema-MeuPPC\\backend\\models\\relatorio.py', reloading
+2025-01-18 22:56:51,014 INFO  * Restarting with stat
+2025-01-18 22:59:07,323 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-01-18 22:59:07,323 INFO [33mPress CTRL+C to quit[0m
+2025-01-18 22:59:07,324 INFO  * Restarting with stat
+2025-01-18 22:59:07,644 WARNING  * Debugger is active!
+2025-01-18 22:59:07,647 INFO  * Debugger PIN: 487-498-111
+2025-01-18 22:59:10,101 ERROR Token expirado
+2025-01-18 22:59:10,102 INFO 127.0.0.1 - - [18/Jan/2025 22:59:10] "[31m[1mGET /api/ppcs HTTP/1.1[0m" 401 -
+2025-01-18 22:59:10,108 ERROR Token expirado
+2025-01-18 22:59:10,109 INFO 127.0.0.1 - - [18/Jan/2025 22:59:10] "[31m[1mGET /api/ppcs HTTP/1.1[0m" 401 -
+2025-01-18 22:59:51,317 INFO  * Detected change in 'C:\\Users\\André Araújo\\Documents\\GitHub\\Sistema-MeuPPC\\backend\\routes\\api.py', reloading
+2025-01-18 22:59:51,348 INFO  * Restarting with stat
+2025-01-18 22:59:51,739 WARNING  * Debugger is active!
+2025-01-18 22:59:51,742 INFO  * Debugger PIN: 487-498-111
+2025-01-18 22:59:53,625 INFO 127.0.0.1 - - [18/Jan/2025 22:59:53] "[31m[1mGET /api/ppcs HTTP/1.1[0m" 401 -
+2025-01-18 22:59:53,644 INFO 127.0.0.1 - - [18/Jan/2025 22:59:53] "[31m[1mGET /api/ppcs HTTP/1.1[0m" 401 -
+2025-01-18 23:00:44,572 INFO  * Detected change in 'C:\\Users\\André Araújo\\Documents\\GitHub\\Sistema-MeuPPC\\backend\\models\\ppc.py', reloading
+2025-01-18 23:00:44,600 INFO  * Restarting with stat
+2025-01-18 23:00:44,973 WARNING  * Debugger is active!
+2025-01-18 23:00:44,976 INFO  * Debugger PIN: 487-498-111
+2025-01-18 23:01:04,363 INFO  * Detected change in 'C:\\Users\\André Araújo\\Documents\\GitHub\\Sistema-MeuPPC\\backend\\models\\ppcCRUD.py', reloading
+2025-01-18 23:01:04,390 INFO  * Restarting with stat
+2025-01-18 23:01:04,722 WARNING  * Debugger is active!
+2025-01-18 23:01:04,725 INFO  * Debugger PIN: 487-498-111
+2025-01-18 23:01:07,283 INFO 127.0.0.1 - - [18/Jan/2025 23:01:07] "[31m[1mGET /api/ppcs HTTP/1.1[0m" 401 -
+2025-01-18 23:01:07,290 INFO 127.0.0.1 - - [18/Jan/2025 23:01:07] "[31m[1mGET /api/ppcs HTTP/1.1[0m" 401 -
+2025-01-18 23:01:08,499 INFO 127.0.0.1 - - [18/Jan/2025 23:01:08] "[31m[1mGET /api/ppcs HTTP/1.1[0m" 401 -
+2025-01-18 23:01:08,506 INFO 127.0.0.1 - - [18/Jan/2025 23:01:08] "[31m[1mGET /api/ppcs HTTP/1.1[0m" 401 -
+2025-01-18 23:02:13,274 INFO 127.0.0.1 - - [18/Jan/2025 23:02:13] "POST /api/users/login HTTP/1.1" 200 -
+2025-01-18 23:02:13,302 INFO 127.0.0.1 - - [18/Jan/2025 23:02:13] "GET /api/ppcs HTTP/1.1" 200 -
+2025-01-18 23:02:13,320 INFO 127.0.0.1 - - [18/Jan/2025 23:02:13] "GET /api/ppcs HTTP/1.1" 200 -
+2025-01-18 23:02:20,863 INFO 127.0.0.1 - - [18/Jan/2025 23:02:20] "GET /api/coordenadores/ppcs_avaliados HTTP/1.1" 200 -
+2025-01-18 23:02:20,874 INFO 127.0.0.1 - - [18/Jan/2025 23:02:20] "GET /api/coordenadores/ppcs_avaliados HTTP/1.1" 200 -
+2025-01-18 23:02:21,927 INFO 127.0.0.1 - - [18/Jan/2025 23:02:21] "GET /api/ppcs HTTP/1.1" 200 -
+2025-01-18 23:02:21,939 INFO 127.0.0.1 - - [18/Jan/2025 23:02:21] "GET /api/ppcs HTTP/1.1" 200 -
+2025-01-18 23:02:22,428 INFO 127.0.0.1 - - [18/Jan/2025 23:02:22] "GET /api/ppcs HTTP/1.1" 200 -
+2025-01-18 23:02:22,437 INFO 127.0.0.1 - - [18/Jan/2025 23:02:22] "GET /api/ppcs HTTP/1.1" 200 -
+2025-01-18 23:02:23,503 INFO 127.0.0.1 - - [18/Jan/2025 23:02:23] "GET /api/ppcs HTTP/1.1" 200 -
+2025-01-18 23:02:23,513 INFO 127.0.0.1 - - [18/Jan/2025 23:02:23] "GET /api/ppcs HTTP/1.1" 200 -
+2025-01-18 23:02:24,688 INFO 127.0.0.1 - - [18/Jan/2025 23:02:24] "OPTIONS /api/perfil HTTP/1.1" 200 -
+2025-01-18 23:02:24,689 INFO 127.0.0.1 - - [18/Jan/2025 23:02:24] "OPTIONS /api/perfil HTTP/1.1" 200 -
+2025-01-18 23:02:24,954 INFO 127.0.0.1 - - [18/Jan/2025 23:02:24] "GET /api/perfil HTTP/1.1" 200 -
+2025-01-18 23:02:25,001 INFO 127.0.0.1 - - [18/Jan/2025 23:02:25] "GET /api/perfil HTTP/1.1" 200 -
+2025-01-18 23:02:26,429 INFO 127.0.0.1 - - [18/Jan/2025 23:02:26] "GET /api/ppcs HTTP/1.1" 200 -
+2025-01-18 23:02:26,439 INFO 127.0.0.1 - - [18/Jan/2025 23:02:26] "GET /api/ppcs HTTP/1.1" 200 -

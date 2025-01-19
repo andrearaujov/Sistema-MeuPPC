@@ -1,0 +1,62 @@
+/* frontend/src/pages/Relatorio/Relatorios.css */
+
+.relatorios-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .relatorios-container h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .relatorios-container .error {
+    text-align: center;
+    color: #dc3545;
+    margin-bottom: 20px;
+  }
+  
+  .relatorios-list {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .relatorio-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .relatorio-item h2 {
+    margin-top: 0;
+    color: #444;
+  }
+  
+  .relatorio-item p {
+    color: #666;
+    margin-bottom: 10px;
+  }
+  
+  .view-link {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .view-link:hover {
+    background-color: #0056b3;
+  }
+  
