@@ -761,3 +761,67 @@ def listar_todos_ppcs_avaliados():
         return jsonify({'error': f'Erro interno do servidor: {e}'}), 500
 
 
+@api_bp.route('/avaliadores/ppcs/<int:ppc_id>/aprovar', methods=['POST'])
+def aprovar_ppc(ppc_id):
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({'error': 'Cabeçalho de autorização não encontrado'}), 401
+
+    try:
+        token = auth_header.split()[1]
+        decoded_token = jwt.decode(token, Config.SECRET_KEY, algorithms=['HS256'])
+        avaliador_id = decoded_token['id']
+
+        # Lógica para aprovar o PPC
+        cursor = mysql.connection.cursor()
+        query = "UPDATE ppc SET status = 'Aprovado' WHERE id = %s"
+        cursor.execute(query, (ppc_id,))
+        mysql.connection.commit()
+        cursor.close()
+
+        return jsonify({'message': 'PPC aprovado com sucesso'}), 200
+    except jwt.ExpiredSignatureError:
+        return jsonify({'error': 'Token expirado, por favor faça login novamente'}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({'error': 'Token inválido, por favor faça login novamente'}), 401
+    except Exception as e:
+        return jsonify({'error': f'Erro interno do servidor: {e}'}), 500
+
+@api_bp.route('/avaliadores/ppcs/<int:ppc_id>/rejeitar', methods=['POST'])
+def rejeitar_ppc(ppc_id):
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        logger.error('Cabeçalho de autorização não encontrado')
+        return jsonify({'error': 'Cabeçalho de autorização não encontrado'}), 401
+
+    try:
+        token = auth_header.split()[1]
+        decoded_token = jwt.decode(token, Config.SECRET_KEY, algorithms=['HS256'])
+        avaliador_id = decoded_token['id']
+
+        data = request.get_json()
+        descricao = data.get('descricao')
+        logger.info(f'Requisição de rejeição recebida para PPC {ppc_id} com a descrição: {descricao}')
+
+        if not descricao:
+            logger.error('Descrição de rejeição não fornecida')
+            return jsonify({'error': 'Descrição de rejeição não fornecida'}), 400
+
+        # Lógica para rejeitar o PPC e adicionar a descrição
+        cursor = mysql.connection.cursor()
+        query = "UPDATE ppc SET status = 'Rejeitado', motivo_rejeicao = %s WHERE id = %s"
+        cursor.execute(query, (descricao, ppc_id))
+        mysql.connection.commit()
+        cursor.close()
+
+        logger.info(f'PPC {ppc_id} rejeitado com sucesso com a descrição: {descricao}')
+        return jsonify({'message': 'PPC rejeitado com sucesso'}), 200
+    except jwt.ExpiredSignatureError:
+        logger.error('Token expirado')
+        return jsonify({'error': 'Token expirado, por favor faça login novamente'}), 401
+    except jwt.InvalidTokenError:
+        logger.error('Token inválido')
+        return jsonify({'error': 'Token inválido, por favor faça login novamente'}), 401
+    except Exception as e:
+        logger.error(f'Erro interno do servidor: {e}')
+        return jsonify({'error': f'Erro interno do servidor: {e}'}), 500
