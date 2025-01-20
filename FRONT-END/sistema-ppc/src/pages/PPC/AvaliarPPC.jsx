@@ -33,24 +33,16 @@ const AvaliarPPC = () => {
   }, [id]);
 
   return (
-    <div>
+    <div className="avaliar-ppc-container">
       <h1>Avaliar PPC</h1>
       <nav>
-        <Link to="/dashboard">Voltar</Link>
+        <Link to="/dashboard" className="avaliar-ppc-back-btn">Voltar</Link>
       </nav>
-      {error && <p className="error">{error}</p>}
+      {error && <p className="avaliar-ppc-error">{error}</p>}
       {ppc && (
-        <div className="ppc-details">
+        <div className="avaliar-ppc-details">
           <h2>{ppc.titulo}</h2>
           <p>{ppc.descricao}</p>
-          {ppc.arquivo && (
-            <div>
-              <h3>Arquivo Anexado:</h3>
-              <a href={`http://localhost:5000/download/${ppc.arquivo}`} target="_blank" rel="noopener noreferrer">
-                Baixar Arquivo
-              </a>
-            </div>
-          )}
         </div>
       )}
     </div>

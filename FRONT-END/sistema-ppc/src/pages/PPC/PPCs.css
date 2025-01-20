@@ -1,135 +1,119 @@
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
-  margin: 0;
-  padding: 0;
+.ppcs-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f7f7f7;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
+.ppcs-container h1 {
+  font-size: 1.75rem;
   color: #333;
-  text-align: center;
-  margin-top: 20px;
-  font-size: 2em;
-}
-
-nav {
-  text-align: center;
   margin-bottom: 20px;
 }
 
-nav a {
-  color: #007bff;
+.ppcs-home-link {
+  display: inline-block;
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
   text-decoration: none;
-  margin: 0 10px;
-  font-size: 1.2em;
-  transition: color 0.3s ease;
-}
-
-nav a:hover {
-  color: #ffdd57;
-  text-decoration: underline;
-}
-
-.error {
-  color: red;
-  text-align: center;
-  font-size: 1.2em;
   font-weight: bold;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.ppc-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+.ppcs-home-link:hover {
+  background-color: #0056b3;
+  color: #ffdd57;
+}
+
+.ppcs-error {
+  color: red;
+  margin-bottom: 20px;
+}
+
+.ppcs-ppc-list {
+  width: 100%;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
 }
 
-.ppc-item {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 300px;
-  transition: transform 0.2s ease;
+.ppcs-ppc-item {
+  background: #fff;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.ppc-item:hover {
+.ppcs-ppc-item:hover {
   transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-.ppc-item h2 {
-  color: #007bff;
-  font-size: 1.6em;
-  margin-top: 0;
-}
-
-.ppc-item p {
-  color: #555;
-  font-size: 1em;
-}
-
-.create-link {
-  display: block;
-  text-align: center;
-  margin: 20px auto;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  text-decoration: none;
-  border-radius: 8px;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-.create-link:hover {
-  background-color: #0056b3;
-}
-
-/* Estilização da página de edição */
-.ppc-edit-form {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 400px;
-  margin: 20px auto;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.ppc-edit-form label {
-  display: block;
-  margin-bottom: 10px;
-  font-size: 1.2em;
+.ppcs-ppc-item h2 {
+  font-size: 1.25rem;
   color: #333;
+  margin-bottom: 10px;
 }
 
-.ppc-edit-form input,
-.ppc-edit-form textarea {
-  width: 100%;
-  padding: 10px;
+.ppcs-ppc-item p {
+  color: #666;
   margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 1em;
 }
 
-.ppc-edit-form button {
-  display: block;
-  width: 100%;
-  padding: 10px;
+.ppcs-ppc-item a {
+  display: inline-block;
   background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.2em;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.ppc-edit-form button:hover {
+.ppcs-ppc-item a:hover {
   background-color: #0056b3;
+  color: #ffdd57;
 }
 
-.ppc-edit-form button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+.ppcs-create-link {
+  display: inline-block;
+  background-color: #28a745;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.ppcs-create-link:hover {
+  background-color: #218838;
+  color: #ffdd57;
+}
+
+.delete-btn {
+  background-color: #b41818;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin-top: 10px;
+}
+
+.delete-btn:hover {
+  background-color: #8e1414;
+  color: #ffdd57;
 }

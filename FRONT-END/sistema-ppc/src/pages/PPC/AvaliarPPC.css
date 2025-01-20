@@ -1,106 +1,55 @@
-/* Estilização geral */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    margin: 0;
-    padding: 0;
-  }
-  
-  h1 {
-    color: #333;
-    text-align: center;
-    margin-top: 20px;
-  }
-  
-  .nav {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .nav a {
-    color: #007bff;
-    text-decoration: none;
-    margin: 0 10px;
-    font-size: 16px;
-  }
-  
-  .nav a:hover {
-    text-decoration: underline;
-  }
-  
-  .error {
-    color: red;
-    text-align: center;
-    font-size: 18px;
-  }
-  
-  .ppc-evaluate-form {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 20px;
-    width: 400px;
-    margin: 20px auto;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .ppc-evaluate-form h2 {
-    color: #007bff;
-    font-size: 22px;
-    margin-top: 0;
-    margin-bottom: 10px;
-  }
-  
-  .ppc-evaluate-form p {
-    color: #555;
-    font-size: 16px;
-    margin-bottom: 20px;
-  }
-  
-  .ppc-evaluate-form label {
-    display: block;
-    margin-bottom: 10px;
-    font-size: 16px;
-    color: #333;
-  }
-  
-  .ppc-evaluate-form select,
-  .ppc-evaluate-form textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-    margin-bottom: 15px;
-  }
-  
-  .ppc-evaluate-form select {
-    height: 40px;
-  }
-  
-  .ppc-evaluate-form textarea {
-    height: 100px;
-  }
-  
-  .ppc-evaluate-form button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .ppc-evaluate-form button:hover {
-    background-color: #0056b3;
-  }
-  
-  .ppc-evaluate-form button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
+.avaliar-ppc-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+
+}
+
+.avaliar-ppc-container h1 {
+  font-size: 1.75rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.avaliar-ppc-error {
+  color: red;
+  margin-bottom: 20px;
+}
+
+.avaliar-ppc-details {
+  width: 100%;
+  max-width: 600px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.avaliar-ppc-details h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.avaliar-ppc-details p {
+  color: #666;
+}
+
+/* Botão Voltar */
+.avaliar-ppc-back-btn {
+  display: inline-block;
+  background-color: #ff6347;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.avaliar-ppc-back-btn:hover {
+  background-color: #cc5135;
+  color: #ffdd57;
+}

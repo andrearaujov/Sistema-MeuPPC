@@ -1,37 +1,64 @@
-/* Estilos para o Login */
-.login-container {
+/* App.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Helvetica;
+  }
+  
+  body {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #5e6272 0%, #beb1ca 100%);
+  }
+  
+  .App {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    text-shadow: #000 1px 1px;
+  }
+  
+  /* Estilos para o Login */
+  .login-container {
     width: 450px;
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(10px);
     border: 2px solid rgba(255, 255, 255, 0.2);
     border-radius: 10px;
     padding: 40px;
-    margin: 50px auto;
     box-sizing: border-box;
-}
-
-.login-container h1 {
+  }
+  
+  .login-container h1 {
     text-align: center;
     font-size: 30px;
     color: #fff;
     margin-bottom: 20px;
-}
-
-.login-container .error {
+  }
+  
+  .login-container .error {
     color: #ff4d4d; /* Vermelho para destacar o erro */
     font-size: 14px;
     text-align: center;
     margin-bottom: 15px;
-}
-
-.login-container .input-field {
+  }
+  
+  .login-container .input-field {
     position: relative;
     width: 100%;
     height: 50px;
     margin: 20px 0;
-}
-
-.login-container .input-field input {
+  }
+  
+  .login-container .input-field input {
     width: 100%;
     height: 100%;
     background: transparent;
@@ -42,49 +69,49 @@
     color: #fff;
     padding: 0 25px 0 45px;
     box-sizing: border-box;
-}
-
-.login-container .input-field input::placeholder {
+  }
+  
+  .login-container .input-field input::placeholder {
     color: #fff;
-}
-
-.login-container .input-field .icon {
+  }
+  
+  .login-container .input-field .icon {
     position: absolute;
     left: 15px;
     top: 50%;
     transform: translateY(-50%);
     font-size: 18px;
     color: #fff;
-}
-
-.login-container .recall-forget {
+  }
+  
+  .login-container .recall-forget {
     display: flex;
     justify-content: space-between;
     font-size: 14px;
     margin: 10px 0 20px;
-}
-
-.login-container .recall-forget label {
+  }
+  
+  .login-container .recall-forget label {
     display: flex;
     align-items: center;
     color: #fff;
-}
-
-.login-container .recall-forget label input {
+  }
+  
+  .login-container .recall-forget label input {
     accent-color: #fff;
     margin-right: 5px;
-}
-
-.login-container .recall-forget a {
+  }
+  
+  .login-container .recall-forget a {
     color: #fff;
     text-decoration: none;
-}
-
-.login-container .recall-forget a:hover {
+  }
+  
+  .login-container .recall-forget a:hover {
     text-decoration: underline;
-}
-
-.login-container button {
+  }
+  
+  .login-container button {
     width: 100%;
     height: 45px;
     background: #fff;
@@ -97,48 +124,41 @@
     font-weight: 700;
     margin-top: 10px;
     transition: background 0.3s;
-}
-
-.login-container button:hover {
+  }
+  
+  .login-container button:hover {
     background: #f0f0f0;
-}
-
-.login-container .signup-link {
+  }
+  
+  .login-container .signup-link {
     font-size: 14px;
     text-align: center;
     margin: 20px 0 0;
-}
-
-.login-container .signup-link p {
+  }
+  
+  .login-container .signup-link p {
     color: #fff;
-}
-
-.login-container .signup-link p a {
+  }
+  
+  .login-container .signup-link p a {
     color: #fff;
     text-decoration: none;
     font-weight: 600;
-}
-
-.login-container .signup-link p a:hover {
+  }
+  
+  .login-container .signup-link p a:hover {
     text-decoration: underline;
-}
-
-/* Estilos gerais do corpo */
-body {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-/* Responsividade */
-@media screen and (max-width: 500px) {
+  }
+  
+  /* Responsividade */
+  @media screen and (max-width: 500px) {
     .login-container {
-        width: 90%;
-        padding: 30px;
+      width: 90%;
+      padding: 30px;
     }
-
+  
     .login-container h1 {
-        font-size: 26px;
+      font-size: 26px;
     }
-}
+  }
+  

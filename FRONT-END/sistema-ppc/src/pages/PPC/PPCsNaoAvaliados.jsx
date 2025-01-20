@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import './PPCsNaoAvaliados.css';
 
 const PPCsNaoAvaliados = () => {
@@ -60,29 +60,29 @@ const PPCsNaoAvaliados = () => {
   };
 
   return (
-    <div>
+    <div className="ppcs-nao-avaliados-container">
       <h1>PPCs Não Avaliados</h1>
       <nav>
-        <Link to="/dashboard">Voltar</Link>
+        <Link to="/dashboard" className="ppcs-nao-avaliados-back-link">Voltar</Link>
       </nav>
-      {error && <p className="error">{error}</p>}
-      {success && <p className="success">{success}</p>}
-      <div className="ppc-list">
+      {error && <p className="ppcs-nao-avaliados-error">{error}</p>}
+      {success && <p className="ppcs-nao-avaliados-success">{success}</p>}
+      <div className="ppcs-nao-avaliados-list">
         {ppcs.map((ppc) => (
-          <div key={ppc.id} className="ppc-item">
+          <div key={ppc.id} className="ppcs-nao-avaliados-item">
             <h3>{ppc.titulo}</h3>
             <p>{ppc.descricao}</p>
-            <Link to={`/avaliar/${ppc.id}`} className="edit-link">
+            <Link to={`/avaliar/${ppc.id}`} className="ppcs-nao-avaliados-edit-link">
               Avaliar
             </Link>
-            <button onClick={() => handleApprove(ppc.id)} className="approve-btn">Aprovar</button>
+            <button onClick={() => handleApprove(ppc.id)} className="ppcs-nao-avaliados-approve-btn">Aprovar</button>
             <textarea
               placeholder="Descreva a razão da rejeição"
               value={rejectionReasons[ppc.id] || ''}
               onChange={(e) => handleRejectionReasonChange(ppc.id, e.target.value)}
-              className="rejection-reason"
+              className="ppcs-nao-avaliados-rejection-reason"
             ></textarea>
-            <button onClick={() => handleReject(ppc.id)} className="reject-btn">Rejeitar</button>
+            <button onClick={() => handleReject(ppc.id)} className="ppcs-nao-avaliados-reject-btn">Rejeitar</button>
           </div>
         ))}
       </div>

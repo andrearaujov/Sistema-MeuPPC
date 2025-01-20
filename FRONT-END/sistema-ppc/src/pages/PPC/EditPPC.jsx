@@ -82,14 +82,14 @@ const EditPPC = () => {
   const isEditable = ppc && ppc.status === 'Em Criacao';
 
   return (
-    <div>
+    <div className="edit-ppc-container">
       <h1>Editar PPC</h1>
       <nav>
-        <Link to="/ppcs">Voltar</Link>
+        <Link to="/ppcs" className="edit-ppc-back-btn">Voltar</Link>
       </nav>
-      {error && <p className="error">{error}</p>}
+      {error && <p className="edit-ppc-error">{error}</p>}
       {ppc && (
-        <div className="ppc-edit-form">
+        <div className="edit-ppc-form">
           <label>
             Título:
             <input

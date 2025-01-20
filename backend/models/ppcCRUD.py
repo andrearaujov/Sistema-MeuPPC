@@ -119,12 +119,21 @@ class PPCCrud:
     @staticmethod
     def deletar(ppc_id):
         """
-        Deleta um PPC do banco de dados.
+        Deleta um PPC do banco de dados, se estiver em status 'Em Criacao'.
         """
         try:
-            cursor = mysql.connection.cursor()
-            query = "DELETE FROM ppc WHERE id = %s"
-            cursor.execute(query, (ppc_id,))
+            cursor = mysql.connection.cursor(cursors.DictCursor)
+            query_status = "SELECT status FROM ppc WHERE id = %s"
+            cursor.execute(query_status, (ppc_id,))
+            resultado = cursor.fetchone()
+
+            if resultado and resultado['status'] != 'Em Criacao':
+                print("Apenas PPCs em criação podem ser excluídos.")
+                cursor.close()
+                return False
+
+            query_deletar = "DELETE FROM ppc WHERE id = %s"
+            cursor.execute(query_deletar, (ppc_id,))
             mysql.connection.commit()
             cursor.close()
             print("PPC deletado com sucesso!")
@@ -188,5 +197,3 @@ class PPCCrud:
             if cursor:
                 cursor.close()
             return []
-
-

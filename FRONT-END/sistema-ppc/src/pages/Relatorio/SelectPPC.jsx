@@ -1,5 +1,3 @@
-// frontend/src/pages/Relatorio/SelectPPC.jsx
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
@@ -41,11 +39,11 @@ const SelectPPC = () => {
     <div className="select-ppc-container">
       <h1>Selecione um PPC</h1>
       <nav>
-        <Link to="/dashboard">Voltar</Link>
+        <Link to="/dashboard" className="select-ppc-back-link">Voltar</Link>
       </nav>
-      {error && <p className="error">{error}</p>}
+      {error && <p className="select-ppc-error">{error}</p>}
       <div className="select-ppc">
-        <select value={selectedPPC} onChange={handleSelect}>
+        <select value={selectedPPC} onChange={handleSelect} className="select-ppc-dropdown">
           <option value="">Escolha um PPC</option>
           {ppcs.map((ppc) => (
             <option key={ppc.id} value={ppc.id}>
@@ -53,9 +51,9 @@ const SelectPPC = () => {
             </option>
           ))}
         </select>
-        <button onClick={() => handleNavigate('colaboradores')}>Relatório de Colaboradores</button>
-        <button onClick={() => handleNavigate('avaliadores')}>Relatório de Avaliadores</button>
-        <button onClick={() => handleNavigate('participantes')}>Relatório de Participantes</button>
+        <button onClick={() => handleNavigate('colaboradores')} className="select-ppc-btn">Relatório de Colaboradores</button>
+        <button onClick={() => handleNavigate('avaliadores')} className="select-ppc-btn">Relatório de Avaliadores</button>
+        <button onClick={() => handleNavigate('participantes')} className="select-ppc-btn">Relatório de Participantes</button>
       </div>
     </div>
   );

@@ -38,9 +38,9 @@ const CreatePPC = () => {
   return (
     <div>
       <h1>Criar Novo PPC</h1>
-      {error && <p className="error">{error}</p>}
+      {error && <p className="create-ppc-error">{error}</p>}
       <form onSubmit={handleSubmit}>
-        <div className="input-field">
+        <div className="create-ppc-input-field">
           <input
             type="text"
             placeholder="Título"
@@ -49,7 +49,7 @@ const CreatePPC = () => {
             onChange={(e) => setTitulo(e.target.value)}
           />
         </div>
-        <div className="input-field">
+        <div className="create-ppc-input-field">
           <textarea
             placeholder="Descrição"
             required

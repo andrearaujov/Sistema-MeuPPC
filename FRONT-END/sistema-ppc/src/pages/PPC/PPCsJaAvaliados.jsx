@@ -35,15 +35,15 @@ const PPCsJaAvaliados = () => {
   }, []);
 
   return (
-    <div>
+    <div className="ppcs-ja-avaliados-container">
       <h1>PPCs Avaliados</h1>
       <nav>
-        <Link to="/dashboard">Voltar</Link>
+        <Link to="/dashboard" className="ppcs-ja-avaliados-back-link">Voltar</Link>
       </nav>
-      {error && <p className="error">{error}</p>}
-      <div className="ppc-list">
+      {error && <p className="ppcs-ja-avaliados-error">{error}</p>}
+      <div className="ppcs-ja-avaliados-list">
         {ppcs.map((ppc) => (
-          <div key={ppc.id} className="ppc-item">
+          <div key={ppc.id} className="ppcs-ja-avaliados-item">
             <h3>{ppc.titulo}</h3>
             <p>{ppc.descricao}</p>
             <p>Status: {ppc.status}</p>

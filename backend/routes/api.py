@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, redirect, url_for, make_response
 from utils.database import mysql
 from flask_cors import cross_origin
+from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 from MySQLdb import Error, cursors
@@ -825,3 +826,49 @@ def rejeitar_ppc(ppc_id):
     except Exception as e:
         logger.error(f'Erro interno do servidor: {e}')
         return jsonify({'error': f'Erro interno do servidor: {e}'}), 500
+
+
+
+# Configuração de logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+@api_bp.route('/ppcs/delete', methods=['POST'])
+def deletar_ppc_post():
+    logger.debug("Iniciando o processo de exclusão do PPC")
+    data = request.get_json()
+    ppc_id = data.get('ppc_id')
+    logger.debug(f"ID do PPC recebido: {ppc_id}")
+
+    token = request.headers.get('Authorization')
+    if not token:
+        logger.error("Erro: Token ausente!")
+        return jsonify({'error': 'Token ausente!'}), 401
+
+    try:
+        token_clean = token.split(" ")[1]  # Remover 'Bearer' do token
+        logger.debug(f"Token limpo: {token_clean}")
+
+        # Decodificar o token JWT
+        decoded_token = jwt.decode(token_clean, Config.SECRET_KEY, algorithms=["HS256"])
+        user_role = decoded_token['papel']
+        logger.debug(f"Token decodificado. Papel do usuário: {user_role}")
+        logger.debug(f"Token decodificado: {decoded_token}")
+
+        if user_role != 'Coordenador':
+            logger.error("Erro: Usuário não é coordenador.")
+            return jsonify({'error': 'Acesso negado: Apenas coordenadores podem realizar esta ação!'}), 403
+
+        cursor = mysql.connection.cursor()
+        cursor.callproc('delete_ppc', [ppc_id])
+        mysql.connection.commit()
+        cursor.close()
+        logger.debug("PPC excluído com sucesso")
+        return jsonify({'message': 'PPC excluído com sucesso'})
+    except Error as db_error:
+        logger.error(f"Erro ao excluir PPC (DB): {str(db_error)}")
+        return jsonify({'error': str(db_error)}), 500
+    except Exception as e:
+        logger.error(f"Erro ao excluir PPC: {str(e)}")
+        return jsonify({'error': str(e)}), 500

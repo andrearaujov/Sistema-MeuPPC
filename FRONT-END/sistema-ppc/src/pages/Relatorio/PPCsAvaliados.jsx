@@ -1,5 +1,3 @@
-// frontend/src/pages/Relatorio/PPCsAvaliados.jsx
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -29,21 +27,21 @@ const PPCsAvaliados = () => {
     <div className="ppcs-avaliados-container">
       <h1>PPCs Avaliados</h1>
       <nav>
-        <Link to="/dashboard">Voltar</Link>
+        <Link to="/dashboard" className="ppcs-avaliados-back-link">Voltar</Link>
       </nav>
-      {error && <p className="error">{error}</p>}
-      <div className="ppc-list">
+      {error && <p className="ppcs-avaliados-error">{error}</p>}
+      <div className="ppcs-avaliados-list">
         {ppcs.map((ppc) => (
-          <div key={ppc.id} className="ppc-item">
+          <div key={ppc.id} className="ppcs-avaliados-item">
             <h2>{ppc.titulo}</h2>
             <p>{ppc.descricao}</p>
-            <Link to={`/ppcs/${ppc.id}/relatorio_colaboradores`} className="report-link">
+            <Link to={`/ppcs/${ppc.id}/relatorio_colaboradores`} className="ppcs-avaliados-report-link">
               Relatório de Colaboradores
             </Link>
-            <Link to={`/ppcs/${ppc.id}/relatorio_avaliadores`} className="report-link">
+            <Link to={`/ppcs/${ppc.id}/relatorio_avaliadores`} className="ppcs-avaliados-report-link">
               Relatório de Avaliadores
             </Link>
-            <Link to={`/ppcs/${ppc.id}/relatorio_participantes`} className="report-link">
+            <Link to={`/ppcs/${ppc.id}/relatorio_participantes`} className="ppcs-avaliados-report-link">
               Relatório de Participantes
             </Link>
           </div>

@@ -1,5 +1,3 @@
-// frontend/src/pages/Relatorio/RelatorioColaboradores.jsx
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
@@ -30,9 +28,9 @@ const RelatorioColaboradores = () => {
     <div className="relatorio-container">
       <h1>Relatório de Colaboradores</h1>
       <nav>
-        <Link to="/dashboard">Voltar</Link>
+        <Link to="/dashboard" className="relatorio-back-link">Voltar</Link>
       </nav>
-      {error && <p className="error">{error}</p>}
+      {error && <p className="relatorio-error">{error}</p>}
       <ul>
         {colaboradores.map((colaborador) => (
           <li key={colaborador.id}>
