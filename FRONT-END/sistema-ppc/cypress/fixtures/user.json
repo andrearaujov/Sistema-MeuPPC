@@ -1,0 +1,20 @@
+{
+  "coordenador": {
+    "nome": "Coordenador Teste",
+    "email": "coordenador@example.com",
+    "password": "senha123",
+    "papel": "Coordenador"
+  },
+  "colaborador": {
+    "nome": "Colaborador Teste",
+    "email": "colaborador@example.com",
+    "password": "senha123",
+    "papel": "Colaborador"
+  },
+  "avaliador": {
+    "nome": "Avaliador Teste",
+    "email": "avaliador@example.com",
+    "password": "senha123",
+    "papel": "Avaliador"
+  }
+}

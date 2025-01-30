@@ -1,12 +1,11 @@
 from flask import Blueprint, request, jsonify, redirect, url_for, make_response
 from utils.database import mysql
-from flask_cors import cross_origin
-from flask_cors import CORS
+
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 from MySQLdb import Error, cursors
 import datetime
-from flask_mysqldb import MySQL, cursors
+from flask_mysqldb import cursors
 from config import Config
 import MySQLdb.cursors
 from models.pessoaCrud import PessoaCRUD
