@@ -327,11 +327,11 @@ def add_colaborador(ppc_id):
 @api_bp.route('/ppcs/<int:ppc_id>/enviar_para_avaliacao', methods=['POST'])
 def enviar_para_avaliacao(ppc_id):
     data = request.get_json()
-    avaliadores_ids = data.get('avaliadores_ids')
+    avaliadores_emails = data.get('avaliadores_emails')
     
-    if not avaliadores_ids:
-        logging.error('Os IDs dos avaliadores são obrigatórios')
-        return jsonify({'error': 'Os IDs dos avaliadores são obrigatórios'}), 400
+    if not avaliadores_emails:
+        logging.error('Os e-mails dos avaliadores são obrigatórios')
+        return jsonify({'error': 'Os e-mails dos avaliadores são obrigatórios'}), 400
 
     auth_header = request.headers.get('Authorization')
     if not auth_header:
@@ -355,8 +355,29 @@ def enviar_para_avaliacao(ppc_id):
             logging.error('Usuário não autorizado ou PPC não encontrado')
             return jsonify({'error': 'Usuário não autorizado'}), 403
 
+        # Obter os IDs dos avaliadores a partir dos e-mails
+        avaliadores_ids = []
+        for email in avaliadores_emails:
+            email = email.strip()  # Remove espaços em branco
+            cursor.execute("SELECT id, papel FROM pessoa WHERE email = %s", (email,))
+            avaliador = cursor.fetchone()
+            if not avaliador:
+                cursor.close()
+                logging.error(f'Avaliador com o e-mail {email} não encontrado')
+                return jsonify({'error': f'Avaliador com o e-mail {email} não encontrado'}), 404
+            if avaliador['papel'] != 'Avaliador':
+                cursor.close()
+                logging.error(f'Usuário com o e-mail {email} não tem o papel de avaliador')
+                return jsonify({'error': f'Usuário com o e-mail {email} não tem o papel de avaliador'}), 403
+            avaliadores_ids.append(avaliador['id'])
+
         # Enviar o PPC para avaliação
         ppc = PPCCrud.buscar_por_id(ppc_id)
+        if not ppc:
+            cursor.close()
+            logging.error('PPC não encontrado')
+            return jsonify({'error': 'PPC não encontrado'}), 404
+
         logging.info(f'PPC encontrado: {ppc.__dict__}')
 
         ppc.enviar_para_avaliacao(avaliadores_ids)
@@ -385,7 +406,6 @@ def enviar_para_avaliacao(ppc_id):
     except Exception as e:
         logging.error(f'Erro interno do servidor: {e}')
         return jsonify({'error': f'Erro interno do servidor: {e}'}), 500
-
 
 @api_bp.route('/colaboradores/ppcs', methods=['GET'])
 def listar_ppcs_colaborador():

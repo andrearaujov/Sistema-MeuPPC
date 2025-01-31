@@ -1,7 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode'; 
 import './PPCsNaoAvaliados.css';
 
 const PPCsNaoAvaliados = () => {
@@ -35,7 +36,7 @@ const PPCsNaoAvaliados = () => {
       await axios.post(`/api/avaliadores/ppcs/${ppcId}/aprovar`, {}, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      setSuccess(`PPC ${ppcId} aprovado com sucesso!`);
+      setSuccess('PPC aprovado com sucesso!'); // Mensagem sem o ID
       setPPCs(ppcs.filter(ppc => ppc.id !== ppcId)); // Remover o PPC aprovado da lista
     } catch (error) {
       setError('Erro ao aprovar PPC');
@@ -48,7 +49,7 @@ const PPCsNaoAvaliados = () => {
       await axios.post(`/api/avaliadores/ppcs/${ppcId}/rejeitar`, { descricao: rejectionReasons[ppcId] }, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      setSuccess(`PPC ${ppcId} rejeitado com sucesso!`);
+      setSuccess('PPC rejeitado com sucesso!'); // Mensagem sem o ID
       setPPCs(ppcs.filter(ppc => ppc.id !== ppcId)); // Remover o PPC rejeitado da lista
     } catch (error) {
       setError('Erro ao rejeitar PPC');

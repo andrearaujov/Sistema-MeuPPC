@@ -70,17 +70,40 @@ describe('Testes de Colaboração', () => {
       cy.get('input[placeholder="E-mail"]').type(colaborador.email);
       cy.get('input[placeholder="Senha"]').type(colaborador.password);
       cy.get('button[type="submit"]').click();
-  
+    
+      // Verificar se está na página correta
+      cy.url().should('include', '/dashboard');
+    
       // Navegar para a lista de PPCs
       cy.contains('Gerenciar PPCs').click();
-  
+    
+      // Verificar se o PPC aparece na lista
+      cy.contains(ppcTitulo).should('be.visible');
+    
       // Editar PPC
       cy.contains(ppcTitulo).parent().contains('Editar').click();
-      cy.get('textarea[placeholder="Descrição"]').clear().type(`${ppcDescricao} - Editado pelo colaborador`);
-      cy.contains('Salvar').click();
-  
+    
+      // Esperar o PPC ser carregado
+      cy.contains('h1', 'Editar PPC').should('be.visible');
+    
+      const novaDescricao = `${ppcDescricao} - Editado pelo colaborador`;
+    
+      // Alterar a descrição
+      cy.contains('label', 'Descrição:').find('textarea').should('be.visible').then(($textarea) => {
+        // Limpar o conteúdo atual e inserir a nova descrição
+        cy.wrap($textarea).clear().type(novaDescricao);
+      });
+    
+      // Clicar em "Salvar"
+      cy.get('button').contains('Salvar').click();
+    
+      // Verificar se a mensagem de sucesso é exibida
+      cy.contains('PPC salvo com sucesso!').should('be.visible');
+    
       // Verificar se as mudanças foram aplicadas
-      cy.contains(`${ppcDescricao} - Editado pelo colaborador`).should('be.visible');
+      cy.contains(novaDescricao).should('be.visible');
     });
+    
+    
   });
   

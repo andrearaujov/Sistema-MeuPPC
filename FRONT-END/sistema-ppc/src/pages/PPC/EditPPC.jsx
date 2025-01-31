@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode'; // Correção na importação
 import './EditPPC.css';
 
 const EditPPC = () => {
@@ -9,9 +9,11 @@ const EditPPC = () => {
   const navigate = useNavigate();
   const [ppc, setPPC] = useState(null);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [saveSuccess, setSaveSuccess] = useState('');
   const [role, setRole] = useState('');
   const [newCollaboratorEmail, setNewCollaboratorEmail] = useState('');
-  const [avaliadoresIds, setAvaliadoresIds] = useState('');
+  const [avaliadoresEmails, setAvaliadoresEmails] = useState(''); // Alterado aqui
 
   useEffect(() => {
     const fetchPPC = async () => {
@@ -33,6 +35,20 @@ const EditPPC = () => {
     fetchPPC();
   }, [id]);
 
+  useEffect(() => {
+    if (success || saveSuccess) {
+      const timer = setTimeout(() => {
+        setSuccess('');
+        setSaveSuccess('');
+        // Redirecionar após limpar a mensagem de sucesso
+        if (ppc && ppc.status !== 'Em Criacao') {
+          navigate('/dashboard');
+        }
+      }, 3000); // Aguarda 3 segundos antes de limpar a mensagem e redirecionar
+      return () => clearTimeout(timer);
+    }
+  }, [success, saveSuccess, navigate, ppc]);
+
   const handleSave = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -41,8 +57,7 @@ const EditPPC = () => {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       console.log('Resposta do servidor:', response.data);
-      alert('PPC salvo com sucesso!');
-      navigate('/dashboard');
+      setSaveSuccess('PPC salvo com sucesso!');
     } catch (error) {
       console.error('Erro ao salvar PPC:', error);
       setError('Erro ao salvar PPC');
@@ -55,7 +70,7 @@ const EditPPC = () => {
       const response = await axios.post(`/api/ppcs/${id}/colaboradores`, { email: newCollaboratorEmail }, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      alert('Colaborador adicionado com sucesso!');
+      setSuccess('Colaborador adicionado com sucesso!');
       setNewCollaboratorEmail('');
     } catch (error) {
       console.error('Erro ao adicionar colaborador:', error);
@@ -66,13 +81,11 @@ const EditPPC = () => {
   const handleSendForReview = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(`/api/ppcs/${id}/enviar_para_avaliacao`, { avaliadores_ids: avaliadoresIds.split(',') }, {
+      const response = await axios.post(`/api/ppcs/${id}/enviar_para_avaliacao`, { avaliadores_emails: avaliadoresEmails.split(',') }, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      alert('PPC enviado para avaliação com sucesso!');
-      if (response.data.redirect_url) {
-        navigate(response.data.redirect_url);  // Redirecionar para o dashboard após enviar para avaliação
-      }
+      setSuccess('PPC enviado para avaliação com sucesso!');
+      setAvaliadoresEmails('');
     } catch (error) {
       console.error('Erro ao enviar para avaliação:', error);
       setError('Erro ao enviar para avaliação');
@@ -88,6 +101,8 @@ const EditPPC = () => {
         <Link to="/ppcs" className="edit-ppc-back-btn">Voltar</Link>
       </nav>
       {error && <p className="edit-ppc-error">{error}</p>}
+      {success && <p className="success-message">{success}</p>}
+      {saveSuccess && <p className="success-message">{saveSuccess}</p>}
       {ppc && (
         <div className="edit-ppc-form">
           <label>
@@ -127,9 +142,9 @@ const EditPPC = () => {
                   Enviar para Avaliação:
                   <input
                     type="text"
-                    value={avaliadoresIds}
-                    onChange={(e) => setAvaliadoresIds(e.target.value)}
-                    placeholder="IDs dos avaliadores, separados por vírgula"
+                    value={avaliadoresEmails}
+                    onChange={(e) => setAvaliadoresEmails(e.target.value)}
+                    placeholder="E-mails dos avaliadores, separados por vírgula"
                   />
                 </label>
                 <button onClick={handleSendForReview}>Enviar para Avaliação</button>
