@@ -891,3 +891,62 @@ def deletar_ppc_post():
     except Exception as e:
         logger.error(f"Erro ao excluir PPC: {str(e)}")
         return jsonify({'error': str(e)}), 500
+
+
+
+@api_bp.route('/ppcs', methods=['GET'])
+def listar_todos_ppcs():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({'error': 'Cabeçalho de autorização não encontrado'}), 401
+
+    try:
+        token = auth_header.split()[1]
+        decoded_token = jwt.decode(token, Config.SECRET_KEY, algorithms=['HS256'])
+        user_role = decoded_token['papel']
+        user_id = decoded_token['id']
+        
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+        if user_role == 'Coordenador':
+            # Coordenador vê todos os PPCs, incluindo os avaliados
+            query = """
+                SELECT * FROM ppc
+                WHERE status IN ('Em Criacao', 'Em Avaliacao', 'Aprovado', 'Rejeitado')
+                ORDER BY created_at DESC
+            """
+            cursor.execute(query)
+        elif user_role == 'Colaborador':
+            # Colaborador vê PPCs onde é colaborador, incluindo os avaliados
+            query = """
+                SELECT ppc.* FROM ppc
+                JOIN ppc_colaboradores pc ON ppc.id = pc.ppc_id
+                WHERE pc.usuario_id = %s
+                AND ppc.status IN ('Em Criacao', 'Em Avaliacao', 'Aprovado', 'Rejeitado')
+                ORDER BY ppc.created_at DESC
+            """
+            cursor.execute(query, (user_id,))
+        elif user_role == 'Avaliador':
+            # Avaliador vê PPCs que avaliou
+            query = """
+                SELECT ppc.* FROM ppc
+                JOIN ppc_avaliadores pa ON ppc.id = pa.ppc_id
+                WHERE pa.usuario_id = %s
+                AND ppc.status IN ('Em Avaliacao', 'Aprovado', 'Rejeitado')
+                ORDER BY ppc.created_at DESC
+            """
+            cursor.execute(query, (user_id,))
+        else:
+            return jsonify({'error': 'Permissão negada'}), 403
+
+        ppcs = cursor.fetchall()
+        cursor.close()
+
+        return jsonify(ppcs), 200
+
+    except jwt.ExpiredSignatureError:
+        return jsonify({'error': 'Token expirado, por favor faça login novamente'}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({'error': 'Token inválido, por favor faça login novamente'}), 401
+    except Exception as e:
+        return jsonify({'error': f'Erro interno do servidor: {e}'}), 500

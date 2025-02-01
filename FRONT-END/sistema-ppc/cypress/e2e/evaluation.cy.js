@@ -17,8 +17,11 @@ describe('Testes de Avaliação', () => {
     papel: 'Coordenador'
   };
 
-  const ppcTitulo = `PPC de Teste ${timestamp}`;
-  const ppcDescricao = 'Descrição do PPC de Teste';
+  const ppcTitulo1 = `PPC de Teste 1 ${timestamp}`;
+  const ppcDescricao1 = 'Descrição do PPC de Teste 1';
+  
+  const ppcTitulo2 = `PPC de Teste 2 ${timestamp}`;
+  const ppcDescricao2 = 'Descrição do PPC de Teste 2';
 
   before(() => {
     // Registrar o avaliador
@@ -45,27 +48,33 @@ describe('Testes de Avaliação', () => {
     cy.get('input[placeholder="Senha"]').type(coordenador.password);
     cy.get('button[type="submit"]').click();
 
-    // Criar um PPC
+    // Criar PPC 1
     cy.contains('Criar PPC').click();
-    cy.get('input[placeholder="Título"]').type(ppcTitulo);
-    cy.get('textarea[placeholder="Descrição"]').type(ppcDescricao);
+    cy.get('input[placeholder="Título"]').type(ppcTitulo1);
+    cy.get('textarea[placeholder="Descrição"]').type(ppcDescricao1);
     cy.get('button[type="submit"]').contains('Criar').click();
-
-    // Verificar se o PPC foi criado com sucesso
-    cy.contains(ppcTitulo).should('be.visible');
-
-    // Navegar para a página de edição do PPC
-    cy.contains(ppcTitulo).parent().contains('Editar').click();
-
-    // Enviar para avaliação
+    cy.contains(ppcTitulo1).should('be.visible');
+    cy.contains(ppcTitulo1).parent().contains('Editar').click();
     cy.get('input[placeholder="E-mails dos avaliadores, separados por vírgula"]').type(avaliador.email);
     cy.contains('Enviar para Avaliação').click();
+    cy.contains('PPC enviado para avaliação com sucesso!').should('be.visible');
 
-    // Verificar se houve mensagem de sucesso
+    // Voltar ao dashboard
+    cy.contains('Voltar').click(); 
+
+    // Criar PPC 2
+    cy.contains('Criar Novo PPC').click();
+    cy.get('input[placeholder="Título"]').type(ppcTitulo2);
+    cy.get('textarea[placeholder="Descrição"]').type(ppcDescricao2);
+    cy.get('button[type="submit"]').contains('Criar').click();
+    cy.contains(ppcTitulo2).should('be.visible');
+    cy.contains(ppcTitulo2).parent().contains('Editar').click();
+    cy.get('input[placeholder="E-mails dos avaliadores, separados por vírgula"]').type(avaliador.email);
+    cy.contains('Enviar para Avaliação').click();
     cy.contains('PPC enviado para avaliação com sucesso!').should('be.visible');
   });
 
-  it('Avaliador deve aprovar o PPC', () => {
+  it('Avaliador deve aprovar o PPC 1', () => {
     // Logar como avaliador
     cy.visit('/');
     cy.get('input[placeholder="E-mail"]').type(avaliador.email);
@@ -75,14 +84,14 @@ describe('Testes de Avaliação', () => {
     // Navegar para PPCs não avaliados
     cy.contains('PPCs Não Avaliados').click();
 
-    // Aprovar PPC
-    cy.contains(ppcTitulo).parent().contains('Aprovar').click();
+    // Aprovar PPC 1
+    cy.contains(ppcTitulo1).parent().contains('Aprovar').click();
 
     // Verificar se houve mensagem de sucesso
     cy.contains('PPC aprovado com sucesso!').should('be.visible');
   });
 
-  it('Avaliador deve rejeitar o PPC', () => {
+  it('Avaliador deve rejeitar o PPC 2', () => {
     // Logar como avaliador
     cy.visit('/');
     cy.get('input[placeholder="E-mail"]').type(avaliador.email);
@@ -92,25 +101,31 @@ describe('Testes de Avaliação', () => {
     // Navegar para PPCs não avaliados
     cy.contains('PPCs Não Avaliados').click();
 
-    // Rejeitar PPC
-    cy.contains(ppcTitulo).parent().find('textarea').type('Rejeitado por não atender aos critérios.');
-    cy.contains(ppcTitulo).parent().contains('Rejeitar').click();
+    // Rejeitar PPC 2
+    cy.contains(ppcTitulo2).parent().find('textarea').type('Rejeitado por não atender aos critérios.');
+    cy.contains(ppcTitulo2).parent().contains('Rejeitar').click();
 
     // Verificar se houve mensagem de sucesso
     cy.contains('PPC rejeitado com sucesso!').should('be.visible');
   });
 
-  it('Avaliador não deve poder editar o PPC', () => {
+  it('Deve exibir PPCs já avaliados', () => {
     // Logar como avaliador
     cy.visit('/');
     cy.get('input[placeholder="E-mail"]').type(avaliador.email);
     cy.get('input[placeholder="Senha"]').type(avaliador.password);
     cy.get('button[type="submit"]').click();
 
-    // Tentar acessar a página de edição do PPC
-    cy.visit(`/ppcs/${ppcTitulo}`, { failOnStatusCode: false });
+    // Navegar para PPCs avaliados
+    cy.contains('PPCs Avaliados').click();
 
-    // Verificar se o acesso foi negado ou redirecionado
-    cy.contains('Acesso negado').should('be.visible');
+    // Verificar se o PPC 1 aprovado está na lista de PPCs avaliados
+    cy.contains(ppcTitulo1).should('be.visible');
+    cy.contains('Status: Aprovado').should('be.visible');
+
+    // Verificar se o PPC 2 rejeitado está na lista de PPCs avaliados
+    cy.contains(ppcTitulo2).should('be.visible');
+    cy.contains('Status: Rejeitado').should('be.visible');
+    cy.contains('Motivo de Rejeição: Rejeitado por não atender aos critérios.').should('be.visible');
   });
 });

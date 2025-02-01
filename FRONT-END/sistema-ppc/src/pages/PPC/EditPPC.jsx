@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode'; // Correção na importação
+import {jwtDecode} from 'jwt-decode'; // Correta importação
 import './EditPPC.css';
 
 const EditPPC = () => {
@@ -13,7 +13,7 @@ const EditPPC = () => {
   const [saveSuccess, setSaveSuccess] = useState('');
   const [role, setRole] = useState('');
   const [newCollaboratorEmail, setNewCollaboratorEmail] = useState('');
-  const [avaliadoresEmails, setAvaliadoresEmails] = useState(''); // Alterado aqui
+  const [avaliadoresEmails, setAvaliadoresEmails] = useState('');
 
   useEffect(() => {
     const fetchPPC = async () => {
@@ -52,14 +52,12 @@ const EditPPC = () => {
   const handleSave = async () => {
     try {
       const token = localStorage.getItem('token');
-      console.log('Dados a serem salvos:', ppc);
-      const response = await axios.put(`/api/ppcs/${id}`, ppc, {
+      await axios.put(`/api/ppcs/${id}`, ppc, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      console.log('Resposta do servidor:', response.data);
       setSaveSuccess('PPC salvo com sucesso!');
+      navigate('/ppcs');
     } catch (error) {
-      console.error('Erro ao salvar PPC:', error);
       setError('Erro ao salvar PPC');
     }
   };
@@ -67,13 +65,12 @@ const EditPPC = () => {
   const handleAddCollaborator = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(`/api/ppcs/${id}/colaboradores`, { email: newCollaboratorEmail }, {
+      await axios.post(`/api/ppcs/${id}/colaboradores`, { email: newCollaboratorEmail }, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       setSuccess('Colaborador adicionado com sucesso!');
       setNewCollaboratorEmail('');
     } catch (error) {
-      console.error('Erro ao adicionar colaborador:', error);
       setError('Erro ao adicionar colaborador');
     }
   };
@@ -81,13 +78,12 @@ const EditPPC = () => {
   const handleSendForReview = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(`/api/ppcs/${id}/enviar_para_avaliacao`, { avaliadores_emails: avaliadoresEmails.split(',') }, {
+      await axios.post(`/api/ppcs/${id}/enviar_para_avaliacao`, { avaliadores_emails: avaliadoresEmails.split(',') }, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       setSuccess('PPC enviado para avaliação com sucesso!');
       setAvaliadoresEmails('');
     } catch (error) {
-      console.error('Erro ao enviar para avaliação:', error);
       setError('Erro ao enviar para avaliação');
     }
   };
@@ -109,6 +105,7 @@ const EditPPC = () => {
             Título:
             <input
               type="text"
+              placeholder="Título"
               value={ppc.titulo}
               onChange={(e) => setPPC({ ...ppc, titulo: e.target.value })}
               disabled={!isEditable}
@@ -117,6 +114,7 @@ const EditPPC = () => {
           <label>
             Descrição:
             <textarea
+              placeholder="Descrição"
               value={ppc.descricao}
               onChange={(e) => setPPC({ ...ppc, descricao: e.target.value })}
               disabled={!isEditable}

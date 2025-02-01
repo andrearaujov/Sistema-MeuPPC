@@ -16,14 +16,17 @@ const SelectPPC = () => {
         const response = await axios.get('/api/ppcs', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
+        console.log('PPCs recebidos:', response.data); // Log para depuração
         setPPCs(response.data);
       } catch (error) {
         setError('Erro ao carregar PPCs');
+        console.error('Erro ao carregar PPCs:', error.response ? error.response.data : error.message);
       }
     };
-
+  
     fetchPPCs();
   }, []);
+  
 
   const handleSelect = (event) => {
     setSelectedPPC(event.target.value);
