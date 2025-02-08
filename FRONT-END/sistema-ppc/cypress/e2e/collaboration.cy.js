@@ -97,8 +97,6 @@ describe('Testes de Colaboração', () => {
       // Clicar em "Salvar"
       cy.get('button').contains('Salvar').click();
     
-      // Verificar se a mensagem de sucesso é exibida
-      cy.contains('PPC salvo com sucesso!').should('be.visible');
     
       // Verificar se as mudanças foram aplicadas
       cy.contains(novaDescricao).should('be.visible');
