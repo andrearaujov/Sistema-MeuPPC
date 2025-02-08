@@ -5,7 +5,7 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       // implementar ouvintes de eventos aqui
     },
-    baseUrl: "http://localhost:5174", // altere para a URL do seu projeto
+    baseUrl: "http://localhost:5174", 
     supportFile: "cypress/support/e2e.js",
     specPattern: "cypress/e2e/**/*.{js,jsx,ts,tsx}",
   },
