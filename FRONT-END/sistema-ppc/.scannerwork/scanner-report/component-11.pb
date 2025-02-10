@@ -1,0 +1,1 @@
+ 2webXhr$cypress/support/component-index.html
